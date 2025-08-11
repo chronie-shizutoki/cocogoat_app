@@ -99,7 +99,7 @@ class _ExportScreenState extends State<ExportScreen> {
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: const [
+                                    children: [
                                       Row(
                                         children: [
                                           Icon(Icons.verified, color: Colors.green, size: 20),
@@ -113,7 +113,7 @@ class _ExportScreenState extends State<ExportScreen> {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text(
                                         '统一可交换成就标准，与其他原神工具完全兼容',
                                         style: TextStyle(fontSize: 12),
@@ -156,7 +156,7 @@ class _ExportScreenState extends State<ExportScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Row(
                                 children: [
                                   Icon(Icons.info_outline, color: Colors.blue),
@@ -167,17 +167,17 @@ class _ExportScreenState extends State<ExportScreen> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 'UIAF (统一可交换成就标准) 是由多个原神工具开发团队共同制定的标准格式，确保成就数据在不同应用间的完全兼容性。',
                                 style: TextStyle(fontSize: 14),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 '支持的应用包括：',
                                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
                                 '• Geshin Achievement\n• Snap.Genshin\n• Genshin Achievement Toy\n• Genshin Achievement Export',
                                 style: TextStyle(fontSize: 12),
