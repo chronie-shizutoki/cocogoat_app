@@ -1,9 +1,19 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import '../models/achievement.dart';
 
 class AchievementDataService {
+  // GitLab仓库基础URL
+  static const String _gitLabBaseUrl = 'https://gitlab.com/Dimbreath/AnimeGameData/-/raw/13be4fd7343fe4cee8fa0096fe854b1c5b01b124';
+
+  // 缓存数据
+  static Map<String, String>? _textMap;
+  static List<Map<String, dynamic>>? _achievementData;
+  static Map<int, Map<String, dynamic>>? _achievementGoalData;
+
+  // 网络请求客户端
+  static final http.Client _httpClient = http.Client();
   static Map<String, String>? _textMap;
   static List<Map<String, dynamic>>? _achievementData;
   static Map<int, Map<String, dynamic>>? _achievementGoalData;
@@ -13,12 +23,16 @@ class AchievementDataService {
     if (_textMap != null) return;
 
     try {
-      // 从AnimeGameData加载中文文本映射
-      final file = File('/home/ubuntu/AnimeGameData/TextMap/TextMapCHS.json');
-      final content = await file.readAsString();
-      final Map<String, dynamic> data = jsonDecode(content);
-      
-      _textMap = data.map((key, value) => MapEntry(key, value.toString()));
+      // 从GitLab仓库加载中文文本映射
+      final url = '$_gitLabBaseUrl/TextMap/TextMapCHS.json';
+      final response = await _httpClient.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        _textMap = data.map((key, value) => MapEntry(key, value.toString()));
+      } else {
+        throw Exception('Failed to load text map: HTTP ${response.statusCode}');
+      }
     } catch (e) {
       debugPrint('Failed to load text map: $e');
       _textMap = {};
@@ -30,12 +44,16 @@ class AchievementDataService {
     if (_achievementData != null) return;
 
     try {
-      // 从AnimeGameData加载成就配置数据
-      final file = File('/home/ubuntu/AnimeGameData/ExcelBinOutput/AchievementExcelConfigData.json');
-      final content = await file.readAsString();
-      final List<dynamic> data = jsonDecode(content);
-      
-      _achievementData = data.cast<Map<String, dynamic>>();
+      // 从GitLab仓库加载成就配置数据
+      final url = '$_gitLabBaseUrl/ExcelBinOutput/AchievementExcelConfigData.json';
+      final response = await _httpClient.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        _achievementData = data.cast<Map<String, dynamic>>();
+      } else {
+        throw Exception('Failed to load achievement data: HTTP ${response.statusCode}');
+      }
     } catch (e) {
       debugPrint('Failed to load achievement data: $e');
       _achievementData = [];
@@ -47,15 +65,19 @@ class AchievementDataService {
     if (_achievementGoalData != null) return;
 
     try {
-      // 从AnimeGameData加载成就目标数据
-      final file = File('/home/ubuntu/AnimeGameData/ExcelBinOutput/AchievementGoalExcelConfigData.json');
-      final content = await file.readAsString();
-      final List<dynamic> data = jsonDecode(content);
-      
-      _achievementGoalData = {};
-      for (final item in data) {
-        final goalId = item['id'] as int;
-        _achievementGoalData![goalId] = item;
+      // 从GitLab仓库加载成就目标数据
+      final url = '$_gitLabBaseUrl/ExcelBinOutput/AchievementGoalExcelConfigData.json';
+      final response = await _httpClient.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        _achievementGoalData = {};
+        for (final item in data) {
+          final goalId = item['id'] as int;
+          _achievementGoalData![goalId] = item;
+        }
+      } else {
+        throw Exception('Failed to load achievement goal data: HTTP ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Failed to load achievement goal data: $e');
