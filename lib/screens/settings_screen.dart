@@ -321,9 +321,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 setState(() {
                   _isLoading = false;
                 });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('备份失败: $e')),
-                );
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('备份失败: $e')),
+                  );
+                }
               }
             },
             child: const Text('开始备份'),
@@ -364,12 +366,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   if (mounted) {
                     if (success) {
                       // 重新加载设置
-                  await _loadSettings();
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('恢复成功！')),
-                    );
-                  }
+                      await _loadSettings();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('恢复成功！')),
+                      );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('恢复失败，请检查文件格式')),
@@ -381,9 +381,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 setState(() {
                   _isLoading = false;
                 });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('恢复失败: $e')),
-                );
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('恢复失败: $e')),
+                  );
+                }
               }
             },
             child: const Text('选择文件'),
