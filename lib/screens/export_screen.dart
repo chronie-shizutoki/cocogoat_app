@@ -12,7 +12,6 @@ class ExportScreen extends StatefulWidget {
 
 class _ExportScreenState extends State<ExportScreen> {
   final ExportService _exportService = ExportService();
-  String _selectedFormat = '1.1';
   bool _completedOnly = false;
   bool _isExporting = false;
 
@@ -39,9 +38,9 @@ class _ExportScreenState extends State<ExportScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '导出统计',
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 12),
                         Row(
@@ -80,16 +79,16 @@ class _ExportScreenState extends State<ExportScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '导出选项',
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         
                         // 格式选择
-                        Text(
+                        const Text(
                           '导出格式',
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
                         Card(
@@ -102,19 +101,19 @@ class _ExportScreenState extends State<ExportScreen> {
                                   children: [
                                     Icon(Icons.verified, color: Colors.green, size: 20),
                                     const SizedBox(width: 8),
-                                    Text(
-                                      'UIAF v1.1 (推荐)',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green,
-                                      ),
-                                    ),
+                                    const Text(
+                                  'UIAF v1.1 (推荐)',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                Text(
+                                const Text(
                                   '统一可交换成就标准，与其他原神工具完全兼容',
-                                  style: Theme.of(context).textTheme.bodySmall,
+                                  style: TextStyle(fontSize: 12),
                                 ),
                               ],
                             ),
@@ -123,17 +122,17 @@ class _ExportScreenState extends State<ExportScreen> {
                         const SizedBox(height: 16),
 
                         // 内容选择
-                        Text(
+                        const Text(
                           '导出内容',
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
                         SwitchListTile(
                           title: const Text('仅导出已完成的成就'),
                           subtitle: Text(
                             _completedOnly 
-                                ? '将导出 ${stats['completed']} 个已完成的成就'
-                                : '将导出全部 ${stats['total']} 个成就',
+                                ? '将导出已完成的成就'
+                                : '将导出全部成就',
                           ),
                           value: _completedOnly,
                           onChanged: (value) {
@@ -159,29 +158,27 @@ class _ExportScreenState extends State<ExportScreen> {
                           children: [
                             Icon(Icons.info_outline, color: Colors.blue),
                             const SizedBox(width: 8),
-                            Text(
+                            const Text(
                               'UIAF标准说明',
-                              style: Theme.of(context).textTheme.titleMedium,
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          'UIAF (统一可交换成就标准) 是由多个原神工具开发团队共同制定的标准格式，确保成就数据在不同应用间的完全兼容性。',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+                        const Text(
+                              'UIAF (统一可交换成就标准) 是由多个原神工具开发团队共同制定的标准格式，确保成就数据在不同应用间的完全兼容性。',
+                              style: TextStyle(fontSize: 14),
+                            ),
                         const SizedBox(height: 8),
-                        Text(
-                          '支持的应用包括：',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        const Text(
+                              '支持的应用包括：',
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
                         const SizedBox(height: 4),
-                        Text(
-                          '• Cocogoat\n• Snap.Genshin\n• Genshin Achievement Toy\n• Genshin Achievement Export',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
+                        const Text(
+                              '• Cocogoat\n• Snap.Genshin\n• Genshin Achievement Toy\n• Genshin Achievement Export',
+                              style: TextStyle(fontSize: 12),
+                            ),
                       ],
                     ),
                   ),
@@ -239,6 +236,8 @@ class _ExportScreenState extends State<ExportScreen> {
   }
 
   Future<void> _exportData(BuildContext context, AchievementProvider provider) async {
+    final localContext = context;
+
     setState(() {
       _isExporting = true;
     });
@@ -254,7 +253,7 @@ class _ExportScreenState extends State<ExportScreen> {
       );
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(localContext).showSnackBar(
           SnackBar(
             content: Text('导出成功！文件已保存到: $filePath'),
             duration: const Duration(seconds: 3),
@@ -267,7 +266,7 @@ class _ExportScreenState extends State<ExportScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(localContext).showSnackBar(
           SnackBar(
             content: Text('导出失败: $e'),
             backgroundColor: Colors.red,

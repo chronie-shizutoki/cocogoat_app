@@ -3,7 +3,7 @@ import '../models/achievement.dart';
 class SampleAchievements {
   static List<Achievement> getSampleData() {
     return [
-      Achievement(
+      const Achievement(
         id: 1,
         name: '初出茅庐',
         description: '完成第一个任务',
@@ -14,7 +14,7 @@ class SampleAchievements {
         tags: ['新手', '任务'],
         version: '1.0',
       ),
-      Achievement(
+      const Achievement(
         id: 2,
         name: '探索者',
         description: '解锁第一个传送锚点',
@@ -25,7 +25,7 @@ class SampleAchievements {
         tags: ['探索', '传送'],
         version: '1.0',
       ),
-      Achievement(
+      const Achievement(
         id: 3,
         name: '收集家',
         description: '收集100个物品',
@@ -36,7 +36,7 @@ class SampleAchievements {
         tags: ['收集', '材料'],
         version: '1.0',
       ),
-      Achievement(
+      const Achievement(
         id: 4,
         name: '战斗专家',
         description: '击败100个敌人',
@@ -47,7 +47,7 @@ class SampleAchievements {
         tags: ['战斗', '敌人'],
         version: '1.0',
       ),
-      Achievement(
+      const Achievement(
         id: 5,
         name: '料理大师',
         description: '制作50道料理',
@@ -58,7 +58,7 @@ class SampleAchievements {
         tags: ['料理', '生活'],
         version: '1.1',
       ),
-      Achievement(
+      const Achievement(
         id: 6,
         name: '深渊挑战者',
         description: '通过深境螺旋第8层',
@@ -69,7 +69,7 @@ class SampleAchievements {
         tags: ['深境螺旋', '挑战'],
         version: '1.0',
       ),
-      Achievement(
+      const Achievement(
         id: 7,
         name: '元素大师',
         description: '触发1000次元素反应',
@@ -80,7 +80,7 @@ class SampleAchievements {
         tags: ['元素', '反应'],
         version: '1.0',
       ),
-      Achievement(
+      const Achievement(
         id: 8,
         name: '宝箱猎人',
         description: '开启500个宝箱',
@@ -91,7 +91,7 @@ class SampleAchievements {
         tags: ['宝箱', '探索'],
         version: '1.0',
       ),
-      Achievement(
+      const Achievement(
         id: 9,
         name: '社交达人',
         description: '与10个NPC对话',
@@ -102,7 +102,7 @@ class SampleAchievements {
         tags: ['NPC', '对话'],
         version: '1.0',
       ),
-      Achievement(
+      const Achievement(
         id: 10,
         name: '摄影师',
         description: '拍摄100张照片',

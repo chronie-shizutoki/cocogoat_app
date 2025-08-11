@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import '../models/achievement.dart';
 
 class AchievementDataService {
@@ -19,7 +20,7 @@ class AchievementDataService {
       
       _textMap = data.map((key, value) => MapEntry(key, value.toString()));
     } catch (e) {
-      print('Failed to load text map: $e');
+      debugPrint('Failed to load text map: $e');
       _textMap = {};
     }
   }
@@ -36,7 +37,7 @@ class AchievementDataService {
       
       _achievementData = data.cast<Map<String, dynamic>>();
     } catch (e) {
-      print('Failed to load achievement data: $e');
+      debugPrint('Failed to load achievement data: $e');
       _achievementData = [];
     }
   }
@@ -57,7 +58,7 @@ class AchievementDataService {
         _achievementGoalData![goalId] = item;
       }
     } catch (e) {
-      print('Failed to load achievement goal data: $e');
+      debugPrint('Failed to load achievement goal data: $e');
       _achievementGoalData = {};
     }
   }
@@ -143,7 +144,7 @@ class AchievementDataService {
 
         achievements.add(achievement);
       } catch (e) {
-        print('Error parsing achievement ${achievementData['id']}: $e');
+        debugPrint('Error parsing achievement ${achievementData['id']}: $e');
         continue;
       }
     }

@@ -33,9 +33,9 @@ class HomeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '成就统计',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         Row(
@@ -100,13 +100,14 @@ class HomeScreen extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '已获得原石',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
+                            const Text(
+                          '已获得原石',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                             Text(
                               '${stats['primogems']}',
-                              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              style: TextStyle(
+                                fontSize: 24,
                                 color: Colors.amber[700],
                                 fontWeight: FontWeight.bold,
                               ),
@@ -120,10 +121,10 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // 分类统计
-                Text(
-                  '分类统计',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
+                const Text(
+                          '分类统计',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
                 const SizedBox(height: 8),
                 if (categories.isEmpty)
                   const Card(
@@ -135,8 +136,7 @@ class HomeScreen extends StatelessWidget {
                 else
                   ...categories.map((category) {
                     final categoryAchievements = provider.achievements
-                        .where((a) => a.category == category)
-                        .toList();
+                        .where((a) => a.category == category);
                     final total = categoryAchievements.length;
                     final completed = categoryAchievements
                         .where((a) => a.isCompleted)
@@ -162,7 +162,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                     );
-                  }).toList(),
+                  })
               ],
             ),
           );

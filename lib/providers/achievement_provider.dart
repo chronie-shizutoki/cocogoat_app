@@ -29,7 +29,7 @@ class AchievementProvider with ChangeNotifier {
       
       if (dbAchievements.isEmpty) {
         // 如果数据库为空，从真实数据源加载
-        print('Loading achievements from real data...');
+        debugPrint('Loading achievements from real data...');
         final realAchievements = await AchievementDataService.parseRealAchievements();
         
         // 保存到数据库
@@ -38,15 +38,15 @@ class AchievementProvider with ChangeNotifier {
         }
         
         _achievements = realAchievements;
-        print('Loaded ${realAchievements.length} achievements from real data');
+        debugPrint('Loaded ${realAchievements.length} achievements from real data');
       } else {
         _achievements = dbAchievements;
-        print('Loaded ${dbAchievements.length} achievements from database');
+        debugPrint('Loaded ${dbAchievements.length} achievements from database');
       }
 
       _applyFilters();
     } catch (e) {
-      print('Error loading achievements: $e');
+      debugPrint('Error loading achievements: $e');
       _achievements = [];
       _filteredAchievements = [];
     } finally {
@@ -75,9 +75,9 @@ class AchievementProvider with ChangeNotifier {
       _achievements = realAchievements;
       _applyFilters();
       
-      print('Reloaded ${realAchievements.length} achievements from real data');
+      debugPrint('Reloaded ${realAchievements.length} achievements from real data');
     } catch (e) {
-      print('Error reloading real data: $e');
+      debugPrint('Error reloading real data: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -92,7 +92,7 @@ class AchievementProvider with ChangeNotifier {
       _applyFilters();
       notifyListeners();
     } catch (e) {
-      print('Error adding achievement: $e');
+      debugPrint('Error adding achievement: $e');
     }
   }
 
@@ -107,7 +107,7 @@ class AchievementProvider with ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      print('Error updating achievement: $e');
+      debugPrint('Error updating achievement: $e');
     }
   }
 
@@ -119,7 +119,7 @@ class AchievementProvider with ChangeNotifier {
       _applyFilters();
       notifyListeners();
     } catch (e) {
-      print('Error deleting achievement: $e');
+      debugPrint('Error deleting achievement: $e');
     }
   }
 
@@ -137,7 +137,7 @@ class AchievementProvider with ChangeNotifier {
         await updateAchievement(updatedAchievement);
       }
     } catch (e) {
-      print('Error toggling achievement completion: $e');
+      debugPrint('Error toggling achievement completion: $e');
     }
   }
 
