@@ -54,9 +54,16 @@ class SettingsProvider with ChangeNotifier {
       return GenshinTheme.lightTheme;
     } else {
       // 跟随系统
-      return MediaQueryData.fromWindow(WidgetsBinding.instance.window).platformBrightness == Brightness.dark
-          ? GenshinTheme.darkTheme
-          : GenshinTheme.lightTheme;
+      // 跟随系统
+      final view = WidgetsBinding.instance.platformDispatcher.implicitView;
+      if (view != null) {
+        return MediaQueryData.fromView(view).platformBrightness == Brightness.dark
+            ? GenshinTheme.darkTheme
+            : GenshinTheme.lightTheme;
+      } else {
+        // 默认使用浅色主题
+        return GenshinTheme.lightTheme;
+      }
     }
   }
 

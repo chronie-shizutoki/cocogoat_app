@@ -47,7 +47,7 @@ class AchievementProvider with ChangeNotifier {
       } else {
         // 从本地存储解析成就数据
         _achievements = achievementsJson
-            .map((json) => Achievement.fromJson(json))
+            .map((json) => Achievement.fromJson(jsonDecode(json))) 
             .toList();
         debugPrint('Loaded ${_achievements.length} achievements from local storage');
       }
@@ -66,7 +66,7 @@ class AchievementProvider with ChangeNotifier {
   // 保存成就数据到本地存储
   Future<void> _saveAchievements(List<Achievement> achievements) async {
     final jsonList = achievements
-        .map((achievement) => achievement.toJson())
+        .map((achievement) => jsonEncode(achievement.toJson()))
         .toList();
     await _prefs.setStringList('achievements', jsonList);
   }

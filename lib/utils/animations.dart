@@ -48,9 +48,19 @@ class GenshinAnimations {
   static Widget pageEnterAnimation(Widget child, Animation<double> animation) {
     return FadeTransition(
       opacity: animation,
+      child: child,
+    );
+  }
+
+  // 淡入上移动画
+  static Widget fadeInUpTransition(Widget child, Animation<double> animation) {
+    return FadeTransition(
+      opacity: animation,
       child: SlideTransition(
-        position: Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero)
-            .animate(animation),
+        position: Tween<Offset>(
+          begin: const Offset(0, 20),
+          end: Offset.zero,
+        ).animate(animation),
         child: child,
       ),
     );

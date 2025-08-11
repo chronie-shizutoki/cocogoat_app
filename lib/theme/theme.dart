@@ -22,12 +22,12 @@ class GenshinTheme {
         primary: GenshinColors.primary,
         secondary: GenshinColors.secondary,
         surface: Colors.white,
-        background: GenshinColors.light,
+        // background属性已弃用，使用surface替代
         error: GenshinColors.danger,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: GenshinColors.dark,
-        onBackground: GenshinColors.dark,
+        // onBackground属性已弃用，使用onSurface替代
         onError: Colors.white,
       ),
       useMaterial3: true,
@@ -95,12 +95,12 @@ class GenshinTheme {
         primary: GenshinColors.primary,
         secondary: GenshinColors.secondary,
         surface: GenshinColors.dark,
-        background: const Color(0xFF121212),
+        // background属性已弃用，使用surface替代
         error: GenshinColors.danger,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: Colors.white,
-        onBackground: Colors.white,
+        // onBackground属性已弃用，使用onSurface替代
         onError: Colors.white,
       ),
       useMaterial3: true,
