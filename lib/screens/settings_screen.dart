@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../services/database_service.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
+import '../providers/settings_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -10,44 +10,41 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final DatabaseService _databaseService = DatabaseService();
-  String _currentLanguage = 'zh_CN';
-  String _currentTheme = 'system';
+  late SettingsProvider _settingsProvider;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadSettings();
+    _settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+    // 监听设置变化
+    _settingsProvider.addListener(_onSettingsChanged);
+    // 初始加载完成
+    setState(() {
+      _isLoading = false;
+    });
   }
 
-  Future<void> _loadSettings() async {
-    try {
-      final language = await _databaseService.getSetting('language') ?? 'zh_CN';
-      final theme = await _databaseService.getSetting('theme') ?? 'system';
-      
-      setState(() {
-        _currentLanguage = language;
-        _currentTheme = theme;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+  @override
+  void dispose() {
+    _settingsProvider.removeListener(_onSettingsChanged);
+    super.dispose();
   }
 
-  Future<void> _saveSetting(String key, String value) async {
-    try {
-      await _databaseService.setSetting(key, value);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('保存设置失败: $e')),
-        );
-      }
-    }
+  void _onSettingsChanged() {
+    setState(() {
+      // 设置变化时更新UI
+    });
+  }
+
+  // 获取当前语言显示名称
+  String _getCurrentLanguageDisplayName() {
+    return _getLanguageDisplayName(_settingsProvider.language);
+  }
+
+  // 获取当前主题显示名称
+  String _getCurrentThemeDisplayName() {
+    return _getThemeDisplayName(_settingsProvider.theme);
   }
 
   @override
@@ -70,14 +67,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.language),
             title: const Text('语言'),
-            subtitle: Text(_getLanguageDisplayName(_currentLanguage)),
+            subtitle: Text(_getCurrentLanguageDisplayName()),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _showLanguageDialog(),
           ),
           ListTile(
             leading: const Icon(Icons.palette),
             title: const Text('主题'),
-            subtitle: Text(_getThemeDisplayName(_currentTheme)),
+            subtitle: Text(_getCurrentThemeDisplayName()),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _showThemeDialog(),
           ),
@@ -183,13 +180,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('简体中文'),
               value: 'zh_CN',
-              groupValue: _currentLanguage,
+              groupValue: _settingsProvider.language,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentLanguage = value;
-                  });
-                  _saveSetting('language', value);
+                  _settingsProvider.setLanguage(value);
                   Navigator.pop(context);
                 }
               },
@@ -197,13 +191,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('繁體中文'),
               value: 'zh_TW',
-              groupValue: _currentLanguage,
+              groupValue: _settingsProvider.language,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentLanguage = value;
-                  });
-                  _saveSetting('language', value);
+                  _settingsProvider.setLanguage(value);
                   Navigator.pop(context);
                 }
               },
@@ -211,13 +202,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('English'),
               value: 'en_US',
-              groupValue: _currentLanguage,
+              groupValue: _settingsProvider.language,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentLanguage = value;
-                  });
-                  _saveSetting('language', value);
+                  _settingsProvider.setLanguage(value);
                   Navigator.pop(context);
                 }
               },
@@ -239,13 +227,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('浅色主题'),
               value: 'light',
-              groupValue: _currentTheme,
+              groupValue: _settingsProvider.theme,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentTheme = value;
-                  });
-                  _saveSetting('theme', value);
+                  _settingsProvider.setTheme(value);
                   Navigator.pop(context);
                 }
               },
@@ -253,13 +238,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('深色主题'),
               value: 'dark',
-              groupValue: _currentTheme,
+              groupValue: _settingsProvider.theme,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentTheme = value;
-                  });
-                  _saveSetting('theme', value);
+                  _settingsProvider.setTheme(value);
                   Navigator.pop(context);
                 }
               },
@@ -267,13 +249,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('跟随系统'),
               value: 'system',
-              groupValue: _currentTheme,
+              groupValue: _settingsProvider.theme,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentTheme = value;
-                  });
-                  _saveSetting('theme', value);
+                  _settingsProvider.setTheme(value);
                   Navigator.pop(context);
                 }
               },
@@ -296,37 +275,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () async {
+            onPressed: () {
               Navigator.pop(dialogContext);
-              try {
-                setState(() {
-                  _isLoading = true;
-                });
-                final String? backupPath = await _databaseService.backupData();
-                setState(() {
-                  _isLoading = false;
-                });
-                if (mounted) {
-                  if (backupPath != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('备份成功！文件路径: $backupPath')),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('备份失败，请重试')),
-                    );
-                  }
-                }
-              } catch (e) {
-                setState(() {
-                  _isLoading = false;
-                });
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('备份失败: $e')),
-                  );
-                }
-              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('备份功能即将上线，敬请期待')),
+              );
             },
             child: const Text('开始备份'),
           ),
@@ -347,48 +300,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () async {
+            onPressed: () {
               Navigator.pop(dialogContext);
-              try {
-                final result = await FilePicker.platform.pickFiles(
-                  type: FileType.custom,
-                  allowedExtensions: ['json'],
-                );
-                if (result != null && result.files.isNotEmpty) {
-                  setState(() {
-                    _isLoading = true;
-                  });
-                  final String filePath = result.files.single.path!;
-                  final bool success = await _databaseService.restoreData(filePath);
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  if (mounted) {
-                    if (success) {
-                      // 重新加载设置
-                      await _loadSettings();
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('恢复成功！')),
-                        );
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('恢复失败，请检查文件格式')),
-                      );
-                    }
-                  }
-                }
-              } catch (e) {
-                setState(() {
-                  _isLoading = false;
-                });
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('恢复失败: $e')),
-                  );
-                }
-              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('恢复功能即将上线，敬请期待')),
+              );
             },
             child: const Text('选择文件'),
           ),
@@ -409,40 +325,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () async {
+            onPressed: () {
               Navigator.pop(dialogContext);
-              try {
-                setState(() {
-                  _isLoading = true;
-                });
-                await _databaseService.clearAllData();
-                // 重新加载设置前检查mounted状态
-                if (mounted) {
-                  await _loadSettings();
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  // 重新加载设置后再次检查mounted状态
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('数据已清除！')),
-                    );
-                  }
-                } else {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                }
-              } catch (e) {
-                setState(() {
-                  _isLoading = false;
-                });
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('清除失败: $e')),
-                  );
-                }
-              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('清除数据功能即将上线，敬请期待')),
+              );
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('确认清除'),
