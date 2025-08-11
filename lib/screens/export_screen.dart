@@ -91,12 +91,12 @@ class _ExportScreenState extends State<ExportScreen> {
                               // 格式选择
                               const Text(
                                 '导出格式',
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 8),
-                              const Card(
-                                child: const Padding(
-                                  padding: const EdgeInsets.all(12.0),
+                              Card(
+                                child: Padding(
+                                  padding: EdgeInsets.all(12.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -104,9 +104,9 @@ class _ExportScreenState extends State<ExportScreen> {
                                         children: [
                                           Icon(Icons.verified, color: Colors.green, size: 20),
                                           const SizedBox(width: 8),
-                                          const Text(
+                                          Text(
                                             'UIAF v1.1 (推荐)',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.green,
                                             ),
@@ -114,9 +114,9 @@ class _ExportScreenState extends State<ExportScreen> {
                                         ],
                                       ),
                                       const SizedBox(height: 4),
-                                      const Text(
+                                      Text(
                                         '统一可交换成就标准，与其他原神工具完全兼容',
-                                        style: const TextStyle(fontSize: 12),
+                                        style: TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -127,11 +127,11 @@ class _ExportScreenState extends State<ExportScreen> {
                               // 内容选择
                               const Text(
                                 '导出内容',
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 8),
                               SwitchListTile(
-                                title: const Text('仅导出已完成的成就'),
+                                title: Text('仅导出已完成的成就'),
                                 subtitle: Text(
                                   _completedOnly 
                                       ? '将导出已完成的成就'
@@ -151,34 +151,34 @@ class _ExportScreenState extends State<ExportScreen> {
                       const SizedBox(height: 16),
 
                       // 格式说明
-                      const Card(
-                        child: const Padding(
-                          padding: const EdgeInsets.all(16.0),
+                      Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
                                   Icon(Icons.info_outline, color: Colors.blue),
-                                  const SizedBox(width: 8),
-                                  const Text(
+                                  SizedBox(width: 8),
+                                  Text(
                                     'UIAF标准说明',
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 8),
-                              const Text(
+                              SizedBox(height: 8),
+                              Text(
                                 'UIAF (统一可交换成就标准) 是由多个原神工具开发团队共同制定的标准格式，确保成就数据在不同应用间的完全兼容性。',
                                 style: TextStyle(fontSize: 14),
                               ),
-                              const SizedBox(height: 8),
-                              const Text(
+                              SizedBox(height: 8),
+                              Text(
                                 '支持的应用包括：',
                                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                               ),
-                              const SizedBox(height: 4),
-                              const Text(
+                              SizedBox(height: 4),
+                              Text(
                                 '• Geshin Achievement\n• Snap.Genshin\n• Genshin Achievement Toy\n• Genshin Achievement Export',
                                 style: TextStyle(fontSize: 12),
                               ),

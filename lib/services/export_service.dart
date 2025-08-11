@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import '../models/achievement.dart';
-import 'package:flutter/foundation.dart' as foundation;
+import 'dart:io';
 
 class ExportService {
   static const String _uiafVersion = 'v1.1';
@@ -57,18 +57,18 @@ class ExportService {
     try {
       Directory directory;
 
-      if (foundation.Platform.isAndroid) {
+      if (Platform.isAndroid) {
         // 对于Android，使用下载文件夹
         directory = Directory('/storage/emulated/0/Download');
         // 确保目录存在
         if (!await directory.exists()) {
           directory = await getApplicationDocumentsDirectory();
         }
-      } else if (foundation.Platform.isIOS) {
+      } else if (Platform.isIOS) {
         // 对于iOS，应用无法直接访问下载文件夹
         // 我们仍然使用文档目录，但在返回路径时提示用户
         directory = await getApplicationDocumentsDirectory();
-      } else if (foundation.Platform.isWindows) {
+      } else if (Platform.isWindows) {
         // 对于Windows，使用下载文件夹
         final String? downloadsPath = await _getWindowsDownloadsPath();
         if (downloadsPath != null) {
@@ -76,9 +76,9 @@ class ExportService {
         } else {
           directory = await getApplicationDocumentsDirectory();
         }
-      } else if (foundation.Platform.isMacOS) {
+      } else if (Platform.isMacOS) {
         // 对于macOS，使用下载文件夹
-        final String homePath = foundation.Platform.environment['HOME'] ?? '';
+        final String homePath = Platform.environment['HOME'] ?? '';
         if (homePath.isNotEmpty) {
           directory = Directory('$homePath/Downloads');
         } else {

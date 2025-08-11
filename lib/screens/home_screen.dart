@@ -86,9 +86,9 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // 原石统计
-                const Card(
-                  child: const Padding(
-                    padding: const EdgeInsets.all(16.0),
+                Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: Row(
                       children: [
                         Icon(
@@ -96,11 +96,11 @@ class HomeScreen extends StatelessWidget {
                           color: Colors.amber,
                           size: 32,
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                           '已获得原石',
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
