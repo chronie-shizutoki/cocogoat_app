@@ -32,7 +32,7 @@ void main() {
           home: Scaffold(
             body: Consumer<AchievementProvider>(
               builder: (context, provider, child) {
-                return Text('Data loaded: \${provider.achievements.isNotEmpty}');
+                return Text('Data loaded: ${provider.achievements.isNotEmpty}');
               },
             ),
           ),
