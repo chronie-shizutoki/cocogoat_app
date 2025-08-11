@@ -8,7 +8,7 @@ class AchievementProvider with ChangeNotifier {
   List<Achievement> _achievements = [];
   List<Achievement> _filteredAchievements = [];
   String _searchQuery = '';
-  String _selectedCategory = '';
+  String _selectedCategory = 'all';
   bool _showCompletedOnly = false;
   bool _isLoading = false;
 
