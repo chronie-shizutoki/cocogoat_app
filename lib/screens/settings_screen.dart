@@ -297,6 +297,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           TextButton(
             onPressed: () async {
+              final BuildContext localContext = context;
               Navigator.pop(context);
               try {
                 setState(() {
@@ -308,11 +309,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 });
                 if (mounted) {
                   if (backupPath != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    ScaffoldMessenger.of(localContext).showSnackBar(
                       SnackBar(content: Text('备份成功！文件路径: $backupPath')),
                     );
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    ScaffoldMessenger.of(localContext).showSnackBar(
                       const SnackBar(content: Text('备份失败，请重试')),
                     );
                   }
@@ -322,7 +323,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _isLoading = false;
                 });
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  ScaffoldMessenger.of(localContext).showSnackBar(
                     SnackBar(content: Text('备份失败: $e')),
                   );
                 }
@@ -348,6 +349,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           TextButton(
             onPressed: () async {
+              final BuildContext localContext = context;
               Navigator.pop(context);
               try {
                 final result = await FilePicker.platform.pickFiles(
@@ -368,12 +370,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       // 重新加载设置
                       await _loadSettings();
                       if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        ScaffoldMessenger.of(localContext).showSnackBar(
                           const SnackBar(content: Text('恢复成功！')),
                         );
                       }
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      ScaffoldMessenger.of(localContext).showSnackBar(
                         const SnackBar(content: Text('恢复失败，请检查文件格式')),
                       );
                     }
@@ -384,7 +386,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _isLoading = false;
                 });
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  ScaffoldMessenger.of(localContext).showSnackBar(
                     SnackBar(content: Text('恢复失败: $e')),
                   );
                 }
@@ -410,39 +412,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           TextButton(
             onPressed: () async {
+              final BuildContext localContext = context;
               Navigator.pop(context);
               try {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    await _databaseService.clearAllData();
-                    // 重新加载设置前检查mounted状态
-                    if (mounted) {
-                      await _loadSettings();
-                      setState(() {
-                        _isLoading = false;
-                      });
-                      // 重新加载设置后再次检查mounted状态
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('数据已清除！')),
-                        );
-                      }
-                    } else {
-                      setState(() {
-                        _isLoading = false;
-                      });
-                    }
-                  } catch (e) {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('清除失败: $e')),
-                      );
-                    }
+                setState(() {
+                  _isLoading = true;
+                });
+                await _databaseService.clearAllData();
+                // 重新加载设置前检查mounted状态
+                if (mounted) {
+                  await _loadSettings();
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  // 重新加载设置后再次检查mounted状态
+                  if (mounted) {
+                    ScaffoldMessenger.of(localContext).showSnackBar(
+                      const SnackBar(content: Text('数据已清除！')),
+                    );
                   }
+                } else {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                }
+              } catch (e) {
+                setState(() {
+                  _isLoading = false;
+                });
+                if (mounted) {
+                  ScaffoldMessenger.of(localContext).showSnackBar(
+                    SnackBar(content: Text('清除失败: $e')),
+                  );
+                }
+              }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('确认清除'),
@@ -507,4 +510,3 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 }
-

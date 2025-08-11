@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                               ? stats['completed']! / stats['total']! 
                               : 0.0,
                           backgroundColor: Colors.grey[300],
-                          valueColor: AlwaysStoppedAnimation<Color>(
+                          valueColor: const AlwaysStoppedAnimation<Color>(
                             Theme.of(context).primaryColor,
                           ),
                         ),
@@ -87,7 +87,7 @@ class HomeScreen extends StatelessWidget {
 
                 // 原石统计
                 Card(
-                  child: Padding(
+                  child: const Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Row(
                       children: [
@@ -101,9 +101,9 @@ class HomeScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                          '已获得原石',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                              '已获得原石',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
                             Text(
                               '${stats['primogems']}',
                               style: TextStyle(
@@ -122,13 +122,13 @@ class HomeScreen extends StatelessWidget {
 
                 // 分类统计
                 const Text(
-                          '分类统计',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
+                  '分类统计',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 8),
                 if (categories.isEmpty)
                   const Card(
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Text('暂无成就数据'),
                     ),
@@ -180,7 +180,7 @@ class HomeScreen extends StatelessWidget {
   ) {
     return Column(
       children: [
-        Icon(icon, color: color, size: 32),
+        const Icon(icon, color: color, size: 32),
         const SizedBox(height: 8),
         Text(
           value,
@@ -189,7 +189,7 @@ class HomeScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(
+        const Text(
           label,
           style: Theme.of(context).textTheme.bodySmall,
         ),
@@ -197,4 +197,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-

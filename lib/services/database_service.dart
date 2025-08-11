@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert'; // Add import for jsonEncode and jsonDecode
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -234,6 +235,7 @@ class DatabaseService {
 
       return file.path;
     } catch (e) {
+      // ignore: avoid_print
       print('Backup failed: $e');
       return null;
     }
@@ -271,6 +273,7 @@ class DatabaseService {
 
       return true;
     } catch (e) {
+      // ignore: avoid_print
       print('Restore failed: $e');
       return false;
     }

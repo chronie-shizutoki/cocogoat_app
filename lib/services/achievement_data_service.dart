@@ -32,7 +32,7 @@ class AchievementDataService {
       }
     } catch (e) {
       debugPrint('Failed to load text map: $e');
-      _textMap = {};
+      _textMap = const {};
     }
   }
 
@@ -53,7 +53,7 @@ class AchievementDataService {
       }
     } catch (e) {
       debugPrint('Failed to load achievement data: $e');
-      _achievementData = [];
+      _achievementData = const [];
     }
   }
 
@@ -78,7 +78,7 @@ class AchievementDataService {
       }
     } catch (e) {
       debugPrint('Failed to load achievement goal data: $e');
-      _achievementGoalData = {};
+      _achievementGoalData = const {};
     }
   }
 
@@ -349,4 +349,3 @@ class AchievementDataService {
     };
   }
 }
-
