@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/database_service.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:convert';
+import 'dart:io';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -295,12 +298,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              // TODO: 实现备份功能
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('备份功能开发中...')),
-              );
+              try {
+                setState(() {
+                  _isLoading = true;
+                });
+                final String? backupPath = await _databaseService.backupData();
+                setState(() {
+                  _isLoading = false;
+                });
+                if (backupPath != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('备份成功！文件路径: $backupPath')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('备份失败，请重试')),
+                  );
+                }
+              } catch (e) {
+                setState(() {
+                  _isLoading = false;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('备份失败: $e')),
+                );
+              }
             },
             child: const Text('开始备份'),
           ),
@@ -321,12 +345,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              // TODO: 实现恢复功能
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('恢复功能开发中...')),
-              );
+              try {
+                final result = await FilePicker.platform.pickFiles(
+                  type: FileType.any,
+                  allowedExtensions: ['json'],
+                );
+                if (result != null && result.files.isNotEmpty) {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  final String filePath = result.files.single.path!;
+                  final bool success = await _databaseService.restoreData(filePath);
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  if (success) {
+                    // 重新加载设置
+                    await _loadSettings();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('恢复成功！')),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('恢复失败，请检查文件格式')),
+                    );
+                  }
+                }
+              } catch (e) {
+                setState(() {
+                  _isLoading = false;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('恢复失败: $e')),
+                );
+              }
             },
             child: const Text('选择文件'),
           ),
@@ -347,12 +401,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              // TODO: 实现清除数据功能
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('清除数据功能开发中...')),
-              );
+              try {
+                setState(() {
+                  _isLoading = true;
+                });
+                await _databaseService.clearAllData();
+                // 重新加载设置
+                await _loadSettings();
+                setState(() {
+                  _isLoading = false;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('数据已清除！')),
+                );
+              } catch (e) {
+                setState(() {
+                  _isLoading = false;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('清除失败: $e')),
+                );
+              }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('确认清除'),

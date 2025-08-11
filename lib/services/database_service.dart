@@ -209,6 +209,95 @@ class DatabaseService {
     await db.delete('achievements');
   }
 
+  // 备份数据到文件
+  Future<String?> backupData() async {
+    try {
+      final achievements = await getAllAchievements();
+      final settings = await _getAllSettings();
+
+      final backupData = {
+        'achievements': achievements.map((a) => a.toJson()).toList(),
+        'settings': settings,
+        'timestamp': DateTime.now().toIso8601String(),
+        'version': '1.0.0',
+      };
+
+      final directory = await getApplicationDocumentsDirectory();
+      final backupDir = Directory('${directory.path}/backups');
+      if (!await backupDir.exists()) {
+        await backupDir.create(recursive: true);
+      }
+
+      final String timestamp = DateTime.now().toIso8601String().replaceAll(RegExp(r'[:.]'), '-');
+      final file = File('${backupDir.path}/backup_$timestamp.json');
+      await file.writeAsString(jsonEncode(backupData));
+
+      return file.path;
+    } catch (e) {
+      print('Backup failed: $e');
+      return null;
+    }
+  }
+
+  // 从文件恢复数据
+  Future<bool> restoreData(String filePath) async {
+    try {
+      final file = File(filePath);
+      if (!await file.exists()) {
+        return false;
+      }
+
+      final String content = await file.readAsString();
+      final Map<String, dynamic> backupData = jsonDecode(content);
+
+      final db = await database;
+      await db.transaction((txn) async {
+        // 清空现有数据
+        await txn.delete('achievements');
+        await txn.delete('settings');
+
+        // 恢复成就数据
+        final List<dynamic> achievements = backupData['achievements'] ?? [];
+        for (final achievementData in achievements) {
+          await txn.insert('achievements', achievementData);
+        }
+
+        // 恢复设置数据
+        final Map<String, dynamic> settings = backupData['settings'] ?? {};
+        for (final key in settings.keys) {
+          await txn.insert('settings', {'key': key, 'value': settings[key]});
+        }
+      });
+
+      return true;
+    } catch (e) {
+      print('Restore failed: $e');
+      return false;
+    }
+  }
+
+  // 获取所有设置
+  Future<Map<String, String>> _getAllSettings() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('settings');
+
+    final Map<String, String> settings = {};
+    for (final map in maps) {
+      settings[map['key']] = map['value'];
+    }
+    return settings;
+  }
+
+  // 清除所有数据（包括成就和设置）
+  Future<void> clearAllData() async {
+    final db = await database;
+    await db.delete('achievements');
+    await db.delete('settings');
+    // 重置默认设置
+    await db.insert('settings', {'key': 'language', 'value': 'zh_CN'});
+    await db.insert('settings', {'key': 'theme', 'value': 'system'});
+  }
+
   // 关闭数据库
   Future<void> close() async {
     final db = await database;
