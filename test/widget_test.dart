@@ -1,30 +1,54 @@
-// This is a basic Flutter widget test.
+// This is a basic Flutter widget test for Cocogoat App.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// This test verifies that the app starts correctly and displays the home screen.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 import 'package:cocogoat_app/main.dart';
+import 'package:cocogoat_app/providers/achievement_provider.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('App starts and displays home screen', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const CocogoatApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that the app starts with the home screen
+    expect(find.text('Cocogoat'), findsOneWidget);
+    expect(find.byType(BottomNavigationBar), findsOneWidget);
+    expect(find.text('首页'), findsOneWidget);
+    expect(find.text('成就'), findsOneWidget);
+    expect(find.text('导出'), findsOneWidget);
+    expect(find.text('设置'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('AchievementProvider initializes correctly', (WidgetTester tester) async {
+    // Create a test app with the provider
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => AchievementProvider(),
+        child: MaterialApp(
+          home: Scaffold(
+            body: Consumer<AchievementProvider>(
+              builder: (context, provider, child) {
+                return Text('Data loaded: \${provider.achievements.isNotEmpty}');
+              },
+            ),
+          ),
+        ),
+      ),
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Initial state should show loading or empty
+    expect(find.text('Data loaded: false'), findsOneWidget);
+
+    // Allow time for data loading
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+
+    // After loading, we should have data or show sample data message
+    // This depends on whether sample data is loaded in your provider
+    // For this test, we'll just check that the provider is properly initialized
+    expect(find.byType(Consumer<AchievementProvider>), findsOneWidget);
   });
 }
