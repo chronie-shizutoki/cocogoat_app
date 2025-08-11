@@ -53,30 +53,17 @@ android {
     }
 
     signingConfigs {
-        debug {
-            // Android Studio 默认的 debug 签名配置
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storeFile file('debug.keystore')
-            storePassword 'android'
-        }
         release {
-            // 使用环境变量或默认值
-            keyAlias System.getenv('KEY_ALIAS') ?: 'cocogoat'
-            keyPassword System.getenv('KEY_PASSWORD') ?: 'cocogoat123'
-            // 优先使用环境变量指定的密钥库路径
-            def keystorePath = System.getenv('KEYSTORE_PATH') ?: 'cocogoat-keystore.jks'
-            // 检查密钥库文件是否存在，如果不存在则使用debug签名
-            storeFile file(keystorePath).exists() ? file(keystorePath) : null
-            storePassword System.getenv('STORE_PASSWORD') ?: 'cocogoat123'
+            keyAlias 'cocogoat'
+            keyPassword 'cocogoat123'
+            storeFile file('cocogoat-keystore.jks')
+            storePassword 'cocogoat123'
         }
     }
 
     buildTypes {
         release {
-            // 根据密钥库文件是否存在决定使用哪个签名配置
-            def useReleaseSigning = signingConfigs.release.storeFile != null
-            signingConfig useReleaseSigning ? signingConfigs.release : signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
