@@ -35,7 +35,7 @@ class _ExportScreenState extends State<ExportScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // 导出统计
-                      const Card(
+                      Card(
                         child: Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Column(
@@ -76,7 +76,7 @@ class _ExportScreenState extends State<ExportScreen> {
                       const SizedBox(height: 16),
 
                       // 导出选项
-                      const Card(
+                      Card(
                         child: Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Column(
@@ -87,7 +87,7 @@ class _ExportScreenState extends State<ExportScreen> {
                                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: 16),
-                              
+                               
                               // 格式选择
                               Text(
                                 '导出格式',
@@ -151,7 +151,7 @@ class _ExportScreenState extends State<ExportScreen> {
                       const SizedBox(height: 16),
 
                       // 格式说明
-                      const Card(
+                      Card(
                         child: Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Column(
@@ -187,7 +187,7 @@ class _ExportScreenState extends State<ExportScreen> {
                         ),
                       ),
                       // 导出按钮
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(16.0),
                         child: SizedBox(
                           width: double.infinity,
@@ -261,7 +261,7 @@ class _ExportScreenState extends State<ExportScreen> {
       if (mounted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           ScaffoldMessenger.of(localContext).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text('导出成功！文件已保存到: $filePath'),
               duration: Duration(seconds: 3),
               action: SnackBarAction(
@@ -276,7 +276,7 @@ class _ExportScreenState extends State<ExportScreen> {
       if (mounted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           ScaffoldMessenger.of(localContext).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text('导出失败: $e'),
               backgroundColor: Colors.red,
             ),
