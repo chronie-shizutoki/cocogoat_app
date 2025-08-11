@@ -7,11 +7,11 @@ import 'screens/export_screen.dart';
 import 'screens/settings_screen.dart';
 
 void main() {
-  runApp(const CocogoatApp());
+  runApp(const GeshinAchievementApp());
 }
 
-class CocogoatApp extends StatelessWidget {
-  const CocogoatApp({super.key});
+class GeshinAchievementApp extends StatelessWidget {
+  const GeshinAchievementApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class CocogoatApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AchievementProvider()),
       ],
       child: MaterialApp(
-        title: 'Cocogoat',
+        title: 'Geshin Achievement',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,

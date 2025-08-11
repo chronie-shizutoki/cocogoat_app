@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.cocogoat.app" "\0"
-            VALUE "FileDescription", "cocogoat_app" "\0"
+            VALUE "CompanyName", "com.geshin.achievement.app" "\0"
+            VALUE "FileDescription", "geshin_achievement" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "cocogoat_app" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2025 com.cocogoat.app. All rights reserved." "\0"
-            VALUE "OriginalFilename", "cocogoat_app.exe" "\0"
-            VALUE "ProductName", "cocogoat_app" "\0"
+            VALUE "InternalName", "geshin_achievement" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 com.geshin.achievement.app. All rights reserved." "\0"
+            VALUE "OriginalFilename", "geshin_achievement.exe" "\0"
+            VALUE "ProductName", "geshin_achievement" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

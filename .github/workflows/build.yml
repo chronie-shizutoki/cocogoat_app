@@ -62,7 +62,7 @@ jobs:
         tag_name: v${{ github.run_number }}
         name: Release v${{ github.run_number }}
         body: |
-          自动构建的Cocogoat成就管理App
+          自动构建的成就管理App
           
           ## 功能特性
           - 完整的原神成就数据（来自AnimeGameData）

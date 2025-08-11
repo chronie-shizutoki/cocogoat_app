@@ -176,7 +176,7 @@ class _ExportScreenState extends State<ExportScreen> {
                             ),
                         const SizedBox(height: 4),
                         const Text(
-                              '• Cocogoat\n• Snap.Genshin\n• Genshin Achievement Toy\n• Genshin Achievement Export',
+                              '• Geshin Achievement\n• Snap.Genshin\n• Genshin Achievement Toy\n• Genshin Achievement Export',
                               style: TextStyle(fontSize: 12),
                             ),
                       ],

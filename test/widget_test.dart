@@ -1,4 +1,4 @@
-// This is a basic Flutter widget test for Cocogoat App.
+// This is a basic Flutter widget test.
 //
 // This test verifies that the app starts correctly and displays the home screen.
 
@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
-import 'package:cocogoat_app/main.dart';
-import 'package:cocogoat_app/providers/achievement_provider.dart';
+import 'package:geshin_achievement/main.dart';
+import 'package:geshin_achievement/providers/achievement_provider.dart';
 
 void main() {
   testWidgets('App starts and displays home screen', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const CocogoatApp());
+    await tester.pumpWidget(const GeshinAchievementApp());
 
     // Verify that the app starts with the home screen
-    expect(find.text('Cocogoat'), findsOneWidget);
+    expect(find.text('Geshin Achievement'), findsOneWidget);
     expect(find.byType(BottomNavigationBar), findsOneWidget);
     expect(find.text('首页'), findsOneWidget);
     expect(find.text('成就'), findsOneWidget);

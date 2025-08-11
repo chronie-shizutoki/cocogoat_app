@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.cocogoat.app.cocogoat_app"
+    namespace "com.geshin.achievement.app.geshin_achievement"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -42,7 +42,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.cocogoat.app"
+        applicationId "com.geshin.achievement.app"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -54,10 +54,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'cocogoat'
-            keyPassword 'cocogoat123'
-            storeFile file('cocogoat-keystore.jks')
-            storePassword 'cocogoat123'
+            keyAlias 'geshin_achievement'
+            keyPassword 'geshin_achievement123'
+            storeFile file('geshin-achievement-keystore.jks')
+            storePassword 'geshin_achievement123'
         }
     }
 

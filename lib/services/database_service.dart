@@ -20,7 +20,7 @@ class DatabaseService {
 
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'cocogoat.db');
+    String path = join(documentsDirectory.path, 'geshin_achievement.db');
     
     return await openDatabase(
       path,

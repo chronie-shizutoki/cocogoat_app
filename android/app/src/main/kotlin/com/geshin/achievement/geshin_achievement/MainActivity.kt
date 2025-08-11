@@ -1,4 +1,4 @@
-package com.cocogoat.app.cocogoat_app
+package com.geshin.achievement.app.geshin_achievement
 
 import io.flutter.embedding.android.FlutterActivity
 

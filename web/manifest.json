@@ -1,6 +1,6 @@
 {
-    "name": "cocogoat_app",
-    "short_name": "cocogoat_app",
+    "name": "geshin_achievement",
+    "short_name": "geshin_achievement",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

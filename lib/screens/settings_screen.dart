@@ -114,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.info),
             title: const Text('版本信息'),
-            subtitle: const Text('Cocogoat v1.0.0'),
+            subtitle: const Text('Geshin Achievement v1.0.0'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _showAboutDialog(),
           ),
@@ -365,7 +365,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showAboutDialog() {
     showAboutDialog(
       context: context,
-      applicationName: 'Cocogoat',
+      applicationName: 'Geshin Achievement',
       applicationVersion: '1.0.0',
       applicationIcon: const Icon(Icons.emoji_events, size: 64),
       children: [
