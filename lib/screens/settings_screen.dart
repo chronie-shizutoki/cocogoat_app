@@ -351,7 +351,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Navigator.pop(dialogContext);
               try {
                 final result = await FilePicker.platform.pickFiles(
-                  type: FileType.any,
+                  type: FileType.custom,
                   allowedExtensions: ['json'],
                 );
                 if (result != null && result.files.isNotEmpty) {
