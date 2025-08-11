@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/database_service.dart';
 import 'package:file_picker/file_picker.dart';
-import 'dart:convert';
-import 'dart:io';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -308,14 +306,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 setState(() {
                   _isLoading = false;
                 });
-                if (backupPath != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('备份成功！文件路径: $backupPath')),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('备份失败，请重试')),
-                  );
+                if (mounted) {
+                  if (backupPath != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('备份成功！文件路径: $backupPath')),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('备份失败，请重试')),
+                    );
+                  }
                 }
               } catch (e) {
                 setState(() {
@@ -361,16 +361,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   setState(() {
                     _isLoading = false;
                   });
-                  if (success) {
-                    // 重新加载设置
-                    await _loadSettings();
+                  if (mounted) {
+                    if (success) {
+                      // 重新加载设置
+                  await _loadSettings();
+                  if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('恢复成功！')),
                     );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('恢复失败，请检查文件格式')),
-                    );
+                  }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('恢复失败，请检查文件格式')),
+                      );
+                    }
                   }
                 }
               } catch (e) {
@@ -404,26 +408,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onPressed: () async {
               Navigator.pop(context);
               try {
-                setState(() {
-                  _isLoading = true;
-                });
-                await _databaseService.clearAllData();
-                // 重新加载设置
-                await _loadSettings();
-                setState(() {
-                  _isLoading = false;
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('数据已清除！')),
-                );
-              } catch (e) {
-                setState(() {
-                  _isLoading = false;
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('清除失败: $e')),
-                );
-              }
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    await _databaseService.clearAllData();
+                    // 重新加载设置
+                    await _loadSettings();
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('数据已清除！')),
+                      );
+                    }
+                  } catch (e) {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('清除失败: $e')),
+                      );
+                    }
+                  }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('确认清除'),
