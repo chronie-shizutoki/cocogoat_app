@@ -287,18 +287,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showBackupDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext dialogContext) => AlertDialog(
         title: const Text('备份数据'),
         content: const Text('此功能将把您的所有成就数据导出为备份文件，您可以在需要时使用此文件恢复数据。'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('取消'),
           ),
           TextButton(
             onPressed: () async {
-              final BuildContext localContext = context;
-              Navigator.pop(context);
+              Navigator.pop(dialogContext);
               try {
                 setState(() {
                   _isLoading = true;
@@ -309,11 +308,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 });
                 if (mounted) {
                   if (backupPath != null) {
-                    ScaffoldMessenger.of(localContext).showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('备份成功！文件路径: $backupPath')),
                     );
                   } else {
-                    ScaffoldMessenger.of(localContext).showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('备份失败，请重试')),
                     );
                   }
@@ -323,7 +322,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _isLoading = false;
                 });
                 if (mounted) {
-                  ScaffoldMessenger.of(localContext).showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('备份失败: $e')),
                   );
                 }
@@ -339,18 +338,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showRestoreDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext dialogContext) => AlertDialog(
         title: const Text('恢复数据'),
         content: const Text('此功能将从备份文件恢复您的成就数据。注意：这将覆盖当前的所有数据。'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('取消'),
           ),
           TextButton(
             onPressed: () async {
-              final BuildContext localContext = context;
-              Navigator.pop(context);
+              Navigator.pop(dialogContext);
               try {
                 final result = await FilePicker.platform.pickFiles(
                   type: FileType.any,
@@ -370,12 +368,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       // 重新加载设置
                       await _loadSettings();
                       if (mounted) {
-                        ScaffoldMessenger.of(localContext).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('恢复成功！')),
                         );
                       }
                     } else {
-                      ScaffoldMessenger.of(localContext).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('恢复失败，请检查文件格式')),
                       );
                     }
@@ -386,7 +384,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _isLoading = false;
                 });
                 if (mounted) {
-                  ScaffoldMessenger.of(localContext).showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('恢复失败: $e')),
                   );
                 }
@@ -402,18 +400,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showClearDataDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext dialogContext) => AlertDialog(
         title: const Text('清除所有数据'),
         content: const Text('此操作将删除所有成就数据和应用设置，且无法恢复。您确定要继续吗？'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('取消'),
           ),
           TextButton(
             onPressed: () async {
-              final BuildContext localContext = context;
-              Navigator.pop(context);
+              Navigator.pop(dialogContext);
               try {
                 setState(() {
                   _isLoading = true;
@@ -427,7 +424,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   });
                   // 重新加载设置后再次检查mounted状态
                   if (mounted) {
-                    ScaffoldMessenger.of(localContext).showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('数据已清除！')),
                     );
                   }
@@ -441,7 +438,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _isLoading = false;
                 });
                 if (mounted) {
-                  ScaffoldMessenger.of(localContext).showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('清除失败: $e')),
                   );
                 }
@@ -476,7 +473,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showHelpDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext dialogContext) => AlertDialog(
         title: const Text('帮助与支持'),
         content: const SingleChildScrollView(
           child: Column(
@@ -502,7 +499,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('确定'),
           ),
         ],
