@@ -14,10 +14,8 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
 
   static const List<Widget> _screens = <Widget>[
     HomeScreen(),
@@ -29,12 +27,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _fadeAnimation = GenshinAnimations.fadeInAnimation(_animationController);
-    _animationController.forward();
 
     // 初始化时加载成就数据
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -48,18 +40,9 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
   void _onItemTapped(int index) {
-    _animationController.reverse().then((_) {
-      setState(() {
-        _selectedIndex = index;
-      });
-      _animationController.forward();
+    setState(() {
+      _selectedIndex = index;
     });
   }
 
@@ -72,18 +55,9 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 500),
         transitionBuilder: (child, animation) {
-          return FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 0.1),
-                end: Offset.zero,
-              ).animate(animation),
-              child: child,
-            ),
-          );
+          return GenshinAnimations.fadeInUpTransition(child, animation);
         },
         child: _screens[_selectedIndex],
       ),

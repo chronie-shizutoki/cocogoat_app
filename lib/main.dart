@@ -22,8 +22,11 @@ class GeshinAchievementApp extends StatelessWidget {
       child: Consumer<SettingsProvider>(
         builder: (context, settingsProvider, child) {
           if (settingsProvider.isLoading) {
-            return const MaterialApp(
-              home: Scaffold(
+            return MaterialApp(
+              theme: GenshinTheme.lightTheme,
+              darkTheme: GenshinTheme.darkTheme,
+              themeMode: ThemeMode.system,
+              home: const Scaffold(
                 body: Center(child: CircularProgressIndicator()),
               ),
             );

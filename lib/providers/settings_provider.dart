@@ -18,11 +18,10 @@ class SettingsProvider with ChangeNotifier {
   // 加载设置
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _theme = prefs.getString('theme') ?? 'system';
-      _language = prefs.getString('language') ?? 'zh_CN';
-      _isLoading = false;
-    });
+    _theme = prefs.getString('theme') ?? 'system';
+    _language = prefs.getString('language') ?? 'zh_CN';
+    _isLoading = false;
+    notifyListeners();
   }
 
   // 设置主题
@@ -32,9 +31,8 @@ class SettingsProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('theme', theme);
 
-    setState(() {
-      _theme = theme;
-    });
+    _theme = theme;
+    notifyListeners();
   }
 
   // 设置语言
@@ -44,9 +42,8 @@ class SettingsProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language', language);
 
-    setState(() {
-      _language = language;
-    });
+    _language = language;
+    notifyListeners();
   }
 
   // 获取当前主题
@@ -63,9 +60,6 @@ class SettingsProvider with ChangeNotifier {
     }
   }
 
-  // 更新状态
-  void setState(VoidCallback fn) {
-    fn();
-    notifyListeners();
-  }
+  // 移除了 setState 方法，Provider 中不需要此方法
+  // 直接修改状态变量后调用 notifyListeners() 即可
 }
