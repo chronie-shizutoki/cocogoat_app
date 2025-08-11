@@ -367,9 +367,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     if (success) {
                       // 重新加载设置
                       await _loadSettings();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('恢复成功！')),
-                      );
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('恢复成功！')),
+                        );
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('恢复失败，请检查文件格式')),
@@ -414,15 +416,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       _isLoading = true;
                     });
                     await _databaseService.clearAllData();
-                    // 重新加载设置
-                    await _loadSettings();
-                    setState(() {
-                      _isLoading = false;
-                    });
+                    // 重新加载设置前检查mounted状态
                     if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('数据已清除！')),
-                      );
+                      await _loadSettings();
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      // 重新加载设置后再次检查mounted状态
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('数据已清除！')),
+                        );
+                      }
+                    } else {
+                      setState(() {
+                        _isLoading = false;
+                      });
                     }
                   } catch (e) {
                     setState(() {
