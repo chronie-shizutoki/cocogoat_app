@@ -14,9 +14,6 @@ class AchievementDataService {
 
   // 网络请求客户端
   static final http.Client _httpClient = http.Client();
-  static Map<String, String>? _textMap;
-  static List<Map<String, dynamic>>? _achievementData;
-  static Map<int, Map<String, dynamic>>? _achievementGoalData;
 
   // 加载文本映射
   static Future<void> loadTextMap() async {
