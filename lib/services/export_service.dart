@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import '../models/achievement.dart';
-import 'dart:io';
 
 class ExportService {
   static const String _uiafVersion = 'v1.1';
