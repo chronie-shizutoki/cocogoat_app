@@ -1,0 +1,55 @@
+name: Code Lines Statistics
+
+on:
+  schedule:
+    # 每周日 00:00 UTC 执行
+    - cron: '0 0 * * 0'
+  push:
+    branches: [ main ]
+
+jobs:
+  code-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          since_last_remote_commit: true
+          files: |
+            **/*.dart
+            **/*.java
+            **/*.kt
+            **/*.swift
+            **/*.h
+            **/*.cpp
+            **/*.c
+            **/*.js
+            **/*.html
+            **/*.css
+            **/*.yaml
+            **/*.yml
+
+      - name: Run code statistics if there are changes
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cloc
+          cloc --exclude-dir=build,.dart_tool,.git,ios,macos,linux,windows,web,test,assets . > code_stats.txt
+          echo "Code statistics completed"
+
+      - name: Display code statistics
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: cat code_stats.txt
+
+      - name: Upload statistics as artifact
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-statistics
+          path: code_stats.txt

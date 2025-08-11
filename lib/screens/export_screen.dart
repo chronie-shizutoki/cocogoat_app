@@ -26,12 +26,14 @@ class _ExportScreenState extends State<ExportScreen> {
         builder: (context, provider, child) {
           final stats = provider.getStats();
           
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+          return Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                 // 导出统计
                 Card(
                   child: Padding(
@@ -184,33 +186,38 @@ class _ExportScreenState extends State<ExportScreen> {
                     ),
                   ),
                 ),
-                
-                                // 导出按钮
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: _isExporting || stats['total'] == 0
-                        ? null
-                        : () => _exportData(context, provider),
-                    icon: _isExporting 
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.file_download),
-                    label: Text(_isExporting ? '导出中...' : '开始导出'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                  ),
-                ),
               ],
             ),
-          );
-        },
+          ),
+        ),
+      ],
+    );})
+
+    // 导出按钮
+    Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          onPressed: _isExporting || stats['total'] == 0
+              ? null
+              : () => _exportData(context, provider),
+          icon: _isExporting 
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.file_download),
+          label: Text(_isExporting ? '导出中...' : '开始导出'),
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+        ),
       ),
-    );
+    ),
+  );
+  },
   }
 
   Widget _buildStatColumn(String label, String value, IconData icon, Color color) {
