@@ -26,11 +26,12 @@ class _ExportScreenState extends State<ExportScreen> {
         builder: (context, provider, child) {
           final stats = provider.getStats();
           
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                 // 导出统计
                 Card(
                   child: Padding(
@@ -184,9 +185,7 @@ class _ExportScreenState extends State<ExportScreen> {
                   ),
                 ),
                 
-                const Spacer(),
-
-                // 导出按钮
+                                // 导出按钮
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
