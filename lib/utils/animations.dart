@@ -30,12 +30,13 @@ class GenshinAnimations {
   }
 
   // 按钮点击动画
-  static Widget buttonAnimation(Widget child) {
+  static Widget buttonAnimation(Widget child, TickerProvider vsync) {
     return ScaleTransition(
       scale: Tween<double>(begin: 1.0, end: 0.95).animate(
         CurvedAnimation(
           parent: AnimationController(
             duration: const Duration(milliseconds: 200),
+            vsync: vsync,
           ),
           curve: Curves.easeInOut,
         ),
