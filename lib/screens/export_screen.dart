@@ -91,11 +91,11 @@ class _ExportScreenState extends State<ExportScreen> {
                               // 格式选择
                               const Text(
                                 '导出格式',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 8),
-                              Card(
-                                child: Padding(
+                              const Card(
+                                child: const Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +106,7 @@ class _ExportScreenState extends State<ExportScreen> {
                                           const SizedBox(width: 8),
                                           const Text(
                                             'UIAF v1.1 (推荐)',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.green,
                                             ),
@@ -116,7 +116,7 @@ class _ExportScreenState extends State<ExportScreen> {
                                       const SizedBox(height: 4),
                                       const Text(
                                         '统一可交换成就标准，与其他原神工具完全兼容',
-                                        style: TextStyle(fontSize: 12),
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -127,7 +127,7 @@ class _ExportScreenState extends State<ExportScreen> {
                               // 内容选择
                               const Text(
                                 '导出内容',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 8),
                               SwitchListTile(
@@ -151,8 +151,8 @@ class _ExportScreenState extends State<ExportScreen> {
                       const SizedBox(height: 16),
 
                       // 格式说明
-                      Card(
-                        child: Padding(
+                      const Card(
+                        child: const Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +163,7 @@ class _ExportScreenState extends State<ExportScreen> {
                                   const SizedBox(width: 8),
                                   const Text(
                                     'UIAF标准说明',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -259,25 +259,29 @@ class _ExportScreenState extends State<ExportScreen> {
       );
 
       if (mounted) {
-        ScaffoldMessenger.of(localContext).showSnackBar(
-          SnackBar(
-            content: Text('导出成功！文件已保存到: $filePath'),
-            duration: const Duration(seconds: 3),
-            action: SnackBarAction(
-              label: '确定',
-              onPressed: () {},
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(localContext).showSnackBar(
+            SnackBar(
+              content: Text('导出成功！文件已保存到: $filePath'),
+              duration: const Duration(seconds: 3),
+              action: SnackBarAction(
+                label: '确定',
+                onPressed: () {},
+              ),
             ),
-          ),
-        );
+          );
+        });
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(localContext).showSnackBar(
-          SnackBar(
-            content: Text('导出失败: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(localContext).showSnackBar(
+            SnackBar(
+              content: Text('导出失败: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        });
       }
     } finally {
       if (mounted) {

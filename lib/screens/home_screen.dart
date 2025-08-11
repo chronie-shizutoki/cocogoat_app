@@ -86,8 +86,8 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // 原石统计
-                Card(
-                  child: Padding(
+                const Card(
+                  child: const Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Row(
                       children: [

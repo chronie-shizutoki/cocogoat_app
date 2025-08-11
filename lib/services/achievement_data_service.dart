@@ -13,7 +13,7 @@ class AchievementDataService {
   static Map<int, Map<String, dynamic>>? _achievementGoalData;
 
   // 网络请求客户端
-  static final http.Client _httpClient = http.Client();
+  static const http.Client _httpClient = http.Client();
 
   // 加载文本映射
   static Future<void> loadTextMap() async {
