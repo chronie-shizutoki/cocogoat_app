@@ -13,7 +13,7 @@ class ExportScreen extends StatefulWidget {
 class _ExportScreenState extends State<ExportScreen> {
   final ExportService _exportService = ExportService();
   bool _completedOnly = false;
-  bool _isExporting = false;
+  bool _isExporting = false; // 这个字段在导出过程中使用
 
   @override
   Widget build(BuildContext context) {
@@ -51,19 +51,19 @@ class _ExportScreenState extends State<ExportScreen> {
                                 children: [
                                   _buildStatColumn(
                                     '总成就',
-                                    'stats[\'total\'].toString()',
+                                    stats['total'].toString(),
                                     Icons.emoji_events,
                                     Colors.blue,
                                   ),
                                   _buildStatColumn(
                                     '已完成',
-                                    'stats[\'completed\'].toString()',
+                                    stats['completed'].toString(),
                                     Icons.check_circle,
                                     Colors.green,
                                   ),
                                   _buildStatColumn(
                                     '原石',
-                                    'stats[\'primogems\'].toString()',
+                                    stats['primogems'].toString(),
                                     Icons.diamond,
                                     Colors.amber,
                                   ),
@@ -133,14 +133,14 @@ class _ExportScreenState extends State<ExportScreen> {
                               SwitchListTile(
                                 title: Text('仅导出已完成的成就'),
                                 subtitle: Text(
-                                  '_completedOnly' 
+                                  _completedOnly 
                                       ? '将导出已完成的成就'
                                       : '将导出全部成就',
                                 ),
-                                value: '_completedOnly',
+                                value: _completedOnly,
                                 onChanged: (value) {
                                   setState(() {
-                                    '_completedOnly' = value;
+                                    _completedOnly = value;
                                   });
                                 },
                               ),
@@ -192,17 +192,17 @@ class _ExportScreenState extends State<ExportScreen> {
                         child: SizedBox(
                           width: double.infinity,
                           child: ElevatedButton.icon(
-                            onPressed: '_isExporting || stats[\'total\'] == 0'
+                            onPressed: _isExporting || stats['total'] == 0
                                 ? null
-                                : () => '_exportData(context, provider)',
-                            icon: '_isExporting' 
+                                : () => _exportData(context, provider),
+                            icon: _isExporting 
                                 ? SizedBox(
                                     width: 20,
                                     height: 20,
                                     child: CircularProgressIndicator(strokeWidth: 2),
                                   )
                                 : Icon(Icons.file_download),
-                            label: Text('_isExporting ? \'导出中...\' : \'开始导出\''),
+                            label: Text(_isExporting ? '导出中...' : '开始导出'),
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(vertical: 16),
                             ),
@@ -223,14 +223,14 @@ class _ExportScreenState extends State<ExportScreen> {
   Widget _buildStatColumn(String label, String value, IconData icon, Color color) {
     return Column(
       children: [
-        const Icon(Icons.emoji_events, color: Colors.blue, size: 32),
+        Icon(Icons.emoji_events, color: color, size: 32),
         const SizedBox(height: 8),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.blue,
+            color: color,
           ),
         ),
         Text(
@@ -262,7 +262,7 @@ class _ExportScreenState extends State<ExportScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           ScaffoldMessenger.of(localContext).showSnackBar(
             const SnackBar(
-              content: Text('导出成功！文件已保存到: filePath'),
+              content: Text('导出成功！文件已保存到: $filePath'),
               duration: Duration(seconds: 3),
               action: SnackBarAction(
                 label: '确定',
@@ -277,7 +277,7 @@ class _ExportScreenState extends State<ExportScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           ScaffoldMessenger.of(localContext).showSnackBar(
             const SnackBar(
-              content: Text('导出失败: e'),
+              content: Text('导出失败: $e'),
               backgroundColor: Colors.red,
             ),
           );
