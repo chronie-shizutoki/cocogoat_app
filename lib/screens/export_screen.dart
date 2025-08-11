@@ -41,7 +41,7 @@ class _ExportScreenState extends State<ExportScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 '导出统计',
                                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
@@ -82,14 +82,14 @@ class _ExportScreenState extends State<ExportScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 '导出选项',
                                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 16),
                               
                               // 格式选择
-                              const Text(
+                              Text(
                                 '导出格式',
                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -99,8 +99,8 @@ class _ExportScreenState extends State<ExportScreen> {
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const Row(
+                                    children: const [
+                                      Row(
                                         children: [
                                           Icon(Icons.verified, color: Colors.green, size: 20),
                                           SizedBox(width: 8),
@@ -113,8 +113,8 @@ class _ExportScreenState extends State<ExportScreen> {
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 4),
-                                      const Text(
+                                      SizedBox(height: 4),
+                                      Text(
                                         '统一可交换成就标准，与其他原神工具完全兼容',
                                         style: TextStyle(fontSize: 12),
                                       ),
@@ -125,7 +125,7 @@ class _ExportScreenState extends State<ExportScreen> {
                               const SizedBox(height: 16),
 
                               // 内容选择
-                              const Text(
+                              Text(
                                 '导出内容',
                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -156,8 +156,8 @@ class _ExportScreenState extends State<ExportScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Row(
+                            children: const [
+                              Row(
                                 children: [
                                   Icon(Icons.info_outline, color: Colors.blue),
                                   SizedBox(width: 8),
@@ -167,18 +167,18 @@ class _ExportScreenState extends State<ExportScreen> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 8),
-                              const Text(
+                              SizedBox(height: 8),
+                              Text(
                                 'UIAF (统一可交换成就标准) 是由多个原神工具开发团队共同制定的标准格式，确保成就数据在不同应用间的完全兼容性。',
                                 style: TextStyle(fontSize: 14),
                               ),
-                              const SizedBox(height: 8),
-                              const Text(
+                              SizedBox(height: 8),
+                              Text(
                                 '支持的应用包括：',
                                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                               ),
-                              const SizedBox(height: 4),
-                              const Text(
+                              SizedBox(height: 4),
+                              Text(
                                 '• Geshin Achievement\n• Snap.Genshin\n• Genshin Achievement Toy\n• Genshin Achievement Export',
                                 style: TextStyle(fontSize: 12),
                               ),
@@ -199,7 +199,7 @@ class _ExportScreenState extends State<ExportScreen> {
                                 ? const SizedBox(
                                     width: 20,
                                     height: 20,
-                                    child: const CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(strokeWidth: 2),
                                   )
                                 : const Icon(Icons.file_download),
                             label: Text(_isExporting ? '导出中...' : '开始导出'),
@@ -233,7 +233,7 @@ class _ExportScreenState extends State<ExportScreen> {
             color: color,
           ),
         ),
-        const Text(
+        Text(
           label,
           style: const TextStyle(fontSize: 12),
         ),
@@ -261,10 +261,10 @@ class _ExportScreenState extends State<ExportScreen> {
       if (mounted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           ScaffoldMessenger.of(localContext).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text('导出成功！文件已保存到: $filePath'),
-              duration: Duration(seconds: 3),
-              action: SnackBarAction(
+              duration: const Duration(seconds: 3),
+              action: const SnackBarAction(
                 label: '确定',
                 onPressed: () {},
               ),
@@ -276,7 +276,7 @@ class _ExportScreenState extends State<ExportScreen> {
       if (mounted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           ScaffoldMessenger.of(localContext).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text('导出失败: $e'),
               backgroundColor: Colors.red,
             ),

@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                               ? stats['completed']! / stats['total']! 
                               : 0.0,
                           backgroundColor: Colors.grey[300],
-                          valueColor: const AlwaysStoppedAnimation<Color>(
+                          valueColor: AlwaysStoppedAnimation<Color>(
                             Theme.of(context).primaryColor,
                           ),
                         ),
@@ -87,8 +87,8 @@ class HomeScreen extends StatelessWidget {
 
                 // 原石统计
                 Card(
-                  child: const Padding(
-                    padding: EdgeInsets.all(16.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
                     child: Row(
                       children: [
                         Icon(
@@ -96,7 +96,7 @@ class HomeScreen extends StatelessWidget {
                           color: Colors.amber,
                           size: 32,
                         ),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -127,10 +127,10 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 if (categories.isEmpty)
-                  const Card(
-                    child: const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text('暂无成就数据'),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: const Text('暂无成就数据'),
                     ),
                   )
                 else
@@ -180,7 +180,7 @@ class HomeScreen extends StatelessWidget {
   ) {
     return Column(
       children: [
-        const Icon(icon, color: color, size: 32),
+        Icon(icon, color: color, size: 32),
         const SizedBox(height: 8),
         Text(
           value,
@@ -189,7 +189,7 @@ class HomeScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const Text(
+        Text(
           label,
           style: Theme.of(context).textTheme.bodySmall,
         ),
