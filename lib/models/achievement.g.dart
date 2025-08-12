@@ -17,8 +17,9 @@ Achievement _$AchievementFromJson(Map<String, dynamic> json) => Achievement(
           ? null
           : DateTime.parse(json['completedDate'] as String),
       guide: json['guide'] as String?,
-      tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-          const [],
+      tags:
+          (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              const [],
       primogems: (json['primogems'] as num?)?.toInt() ?? 0,
       version: json['version'] as String? ?? '',
     );
@@ -73,4 +74,3 @@ Map<String, dynamic> _$ExportFormatToJson(ExportFormat instance) =>
       'fileName': instance.fileName,
       'exportDate': instance.exportDate.toIso8601String(),
     };
-

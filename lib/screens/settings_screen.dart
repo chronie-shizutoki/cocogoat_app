@@ -347,7 +347,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               try {
                 // 打开文件选择器
                 final result = await FilePicker.platform.pickFiles(
-                  type: FileType.any,
+                  type: FileType.custom,
                   allowedExtensions: ['json'],
                   dialogTitle: '选择备份文件',
                 );
