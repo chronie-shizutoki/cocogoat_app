@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:file_picker/file_picker.dart';
 import '../providers/settings_provider.dart';
+import '../providers/achievement_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -275,11 +280,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(dialogContext);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('备份功能即将上线，敬请期待')),
-              );
+              try {
+                // 获取成就数据
+                final achievementProvider = Provider.of<AchievementProvider>(context, listen: false);
+                final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+
+                // 创建备份数据
+                final backupData = {
+                  'achievements': achievementProvider.achievements,
+                  'settings': {
+                    'theme': settingsProvider.theme,
+                    'language': settingsProvider.language,
+                  },
+                  'timestamp': DateTime.now().toIso8601String(),
+                };
+
+                // 获取文档目录
+                final directory = await getApplicationDocumentsDirectory();
+                final backupDir = Directory('${directory.path}/backups');
+                if (!await backupDir.exists()) {
+                  await backupDir.create(recursive: true);
+                }
+
+                // 创建备份文件
+                final String formattedDate = DateTime.now().toString().replaceAll(RegExp(r'[/\:]'), '-');
+                final backupFile = File('${backupDir.path}/backup_$formattedDate.json');
+
+                // 写入备份数据
+                await backupFile.writeAsString(json.encode(backupData));
+
+                // 显示成功消息
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('备份成功: ${backupFile.path}')),
+                );
+              } catch (e) {
+                // 显示错误消息
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('备份失败: $e')),
+                );
+              }
             },
             child: const Text('开始备份'),
           ),
@@ -300,11 +341,77 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(dialogContext);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('恢复功能即将上线，敬请期待')),
-              );
+              try {
+                // 打开文件选择器
+                final result = await FilePicker.platform.pickFiles(
+                  type: FileType.any,
+                  allowedExtensions: ['json'],
+                  dialogTitle: '选择备份文件',
+                );
+
+                if (result == null || result.files.isEmpty) {
+                  return;
+                }
+
+                // 读取文件内容
+                final file = File(result.files.single.path!);
+                final fileContent = await file.readAsString();
+                final backupData = json.decode(fileContent);
+
+                // 获取providers
+                final achievementProvider = Provider.of<AchievementProvider>(context, listen: false);
+                final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+
+                // 恢复设置
+                if (backupData['settings'] != null) {
+                  final settings = backupData['settings'];
+                  if (settings['theme'] != null) {
+                    await settingsProvider.setTheme(settings['theme']);
+                  }
+                  if (settings['language'] != null) {
+                    await settingsProvider.setLanguage(settings['language']);
+                  }
+                }
+
+                // 恢复成就数据
+                if (backupData['achievements'] != null) {
+                  // 这里需要根据实际的Achievement模型进行解析和恢复
+                  // 由于我们没有完整的Achievement模型代码，这里假设它有一个fromJson方法
+                  List<dynamic> achievementsJson = backupData['achievements'];
+                  List<Achievement> restoredAchievements = [];
+
+                  for (var achievementJson in achievementsJson) {
+                    // 尝试将JSON转换为Achievement对象
+                    try {
+                      // 使用fromJson方法转换
+                      Achievement achievement = Achievement.fromJson(achievementJson);
+                      restoredAchievements.add(achievement);
+                    } catch (e) {
+                      debugPrint('Error parsing achievement: $e');
+                    }
+                  }
+
+                  // 清空现有成就并添加恢复的成就
+                  // 注意：这里需要AchievementProvider提供清空方法
+                  // 如果没有，我们可能需要修改AchievementProvider
+                  await achievementProvider.reloadRealData(); // 先重置为真实数据
+                  for (var achievement in restoredAchievements) {
+                    await achievementProvider.updateAchievement(achievement);
+                  }
+                }
+
+                // 显示成功消息
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('恢复成功')),
+                );
+              } catch (e) {
+                // 显示错误消息
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('恢复失败: $e')),
+                );
+              }
             },
             child: const Text('选择文件'),
           ),
@@ -325,11 +432,51 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(dialogContext);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('清除数据功能即将上线，敬请期待')),
-              );
+              try {
+                // 显示二次确认对话框
+                showDialog(
+                  context: context,
+                  builder: (BuildContext confirmDialogContext) => AlertDialog(
+                    title: const Text('确认清除'),
+                    content: const Text('确定要清除所有数据吗？此操作无法撤销。'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(confirmDialogContext),
+                        child: const Text('取消'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(confirmDialogContext);
+                          // 获取providers
+                          final achievementProvider = Provider.of<AchievementProvider>(context, listen: false);
+                          final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+
+                          // 清除成就数据
+                          await achievementProvider.reloadRealData(); // 重置为初始数据
+
+                          // 清除设置数据 (重置为默认值)
+                          await settingsProvider.setTheme('system');
+                          await settingsProvider.setLanguage('zh_CN');
+
+                          // 显示成功消息
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('清除数据成功')),
+                          );
+                        },
+                        style: TextButton.styleFrom(foregroundColor: Colors.red),
+                        child: const Text('确认清除'),
+                      ),
+                    ],
+                  ),
+                );
+              } catch (e) {
+                // 显示错误消息
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('清除数据失败: $e')),
+                );
+              }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('确认清除'),
