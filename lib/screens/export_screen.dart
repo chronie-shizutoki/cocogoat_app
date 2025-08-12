@@ -179,7 +179,7 @@ class _ExportScreenState extends State<ExportScreen> {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                '• Geshin Achievement\n• Snap.Genshin\n• Genshin Achievement Toy\n• Genshin Achievement Export',
+                                '• Genshin Achievement\n• Snap.Genshin\n• Genshin Achievement Toy\n• Genshin Achievement Export',
                                 style: TextStyle(fontSize: 12),
                               ),
                             ],

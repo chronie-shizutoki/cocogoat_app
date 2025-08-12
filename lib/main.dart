@@ -6,11 +6,11 @@ import 'theme/theme.dart';
 import 'providers/settings_provider.dart';
 
 void main() {
-  runApp(const GeshinAchievementApp());
+  runApp(const GenshinAchievementApp());
 }
 
-class GeshinAchievementApp extends StatelessWidget {
-  const GeshinAchievementApp({super.key});
+class GenshinAchievementApp extends StatelessWidget {
+  const GenshinAchievementApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class GeshinAchievementApp extends StatelessWidget {
           }
 
           return MaterialApp(
-            title: 'Geshin Achievement',
+            title: 'Genshin Achievement',
             theme: GenshinTheme.lightTheme,
             darkTheme: GenshinTheme.darkTheme,
             themeMode: settingsProvider.theme == 'system'

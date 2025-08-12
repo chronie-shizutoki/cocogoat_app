@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.geshin.achievement.app.geshin_achievement"
+    namespace "com.genshin.achievement.app.genshin_achievement"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -42,7 +42,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.geshin.achievement.app"
+        applicationId "com.genshin.achievement.app"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -54,10 +54,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'geshin_achievement'
-            keyPassword 'geshin_achievement123'
-            storeFile file('geshin-achievement-keystore.jks')
-            storePassword 'geshin_achievement123'
+            keyAlias 'genshin_achievement'
+            keyPassword 'genshin_achievement123'
+            storeFile file('genshin-achievement-keystore.jks')
+            storePassword 'genshin_achievement123'
         }
     }
 

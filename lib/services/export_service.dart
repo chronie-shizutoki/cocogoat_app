@@ -5,7 +5,7 @@ import '../models/achievement.dart';
 
 class ExportService {
   static const String _uiafVersion = 'v1.1';
-  static const String _appName = 'Geshin Achievement';
+  static const String _appName = 'Genshin Achievement';
   static const String _appVersion = '1.0.0';
 
   // 导出为UIAF v1.1标准格式
@@ -117,7 +117,7 @@ class ExportService {
   }) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final fileName = customFileName ?? 
-        'geshin_achievement_achievements_uiaf_$timestamp.json';
+        'genshin_achievement_achievements_uiaf_$timestamp.json';
 
     final content = await exportToUIAF(achievements, completedOnly: completedOnly);
     return await saveToFile(content, fileName);

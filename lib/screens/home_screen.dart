@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Geshin Achievement'),
+        title: const Text('Genshin Achievement'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Consumer<AchievementProvider>(

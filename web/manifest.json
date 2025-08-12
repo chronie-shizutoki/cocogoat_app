@@ -1,6 +1,6 @@
 {
-    "name": "geshin_achievement",
-    "short_name": "geshin_achievement",
+    "name": "genshin_achievement",
+    "short_name": "genshin_achievement",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
