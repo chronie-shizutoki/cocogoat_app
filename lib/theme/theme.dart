@@ -43,7 +43,7 @@ class GenshinTheme {
         bodyMedium: TextStyle(fontSize: 14),
         bodySmall: TextStyle(fontSize: 12),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -116,7 +116,7 @@ class GenshinTheme {
         bodyMedium: TextStyle(fontSize: 14),
         bodySmall: TextStyle(fontSize: 12),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 4,
         color: const Color(0xFF333333),
         shape: RoundedRectangleBorder(
