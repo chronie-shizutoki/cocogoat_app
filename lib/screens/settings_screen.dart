@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import '../providers/settings_provider.dart';
 import '../providers/achievement_provider.dart';
+import '../models/achievement.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
