@@ -5,7 +5,7 @@ import '../models/achievement.dart';
 
 class ExportService {
   static const String _uiafVersion = 'v1.1';
-  static const String _appName = 'Geshin Achievement';
+  static const String _appName = 'Genshin Achievement';
   static const String _appVersion = '1.0.0';
 
   // 导出为UIAF v1.1标准格式
@@ -51,15 +51,61 @@ class ExportService {
     }
   }
 
-  // 保存文件到本地
+  // 保存文件到下载文件夹
   Future<String> saveToFile(String content, String fileName) async {
     try {
-      final directory = await getApplicationDocumentsDirectory();
+      Directory directory;
+
+      if (Platform.isAndroid) {
+        // 对于Android，使用下载文件夹
+        directory = Directory('/storage/emulated/0/Download');
+        // 确保目录存在
+        if (!await directory.exists()) {
+          directory = await getApplicationDocumentsDirectory();
+        }
+      } else if (Platform.isIOS) {
+        // 对于iOS，应用无法直接访问下载文件夹
+        // 我们仍然使用文档目录，但在返回路径时提示用户
+        directory = await getApplicationDocumentsDirectory();
+      } else if (Platform.isWindows) {
+        // 对于Windows，使用下载文件夹
+        final String? downloadsPath = await _getWindowsDownloadsPath();
+        if (downloadsPath != null) {
+          directory = Directory(downloadsPath);
+        } else {
+          directory = await getApplicationDocumentsDirectory();
+        }
+      } else if (Platform.isMacOS) {
+        // 对于macOS，使用下载文件夹
+        final String homePath = Platform.environment['HOME'] ?? '';
+        if (homePath.isNotEmpty) {
+          directory = Directory('$homePath/Downloads');
+        } else {
+          directory = await getApplicationDocumentsDirectory();
+        }
+      } else {
+        // 其他平台，使用文档目录
+        directory = await getApplicationDocumentsDirectory();
+      }
+
       final file = File('${directory.path}/$fileName');
       await file.writeAsString(content);
       return file.path;
     } catch (e) {
       throw Exception('Failed to save file: $e');
+    }
+  }
+
+  // 获取Windows下载文件夹路径
+  Future<String?> _getWindowsDownloadsPath() async {
+    try {
+      final String? userProfile = Platform.environment['USERPROFILE'];
+      if (userProfile != null) {
+        return '$userProfile\\Downloads';
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -71,7 +117,7 @@ class ExportService {
   }) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final fileName = customFileName ?? 
-        'geshin_achievement_achievements_uiaf_$timestamp.json';
+        'genshin_achievement_achievements_uiaf_$timestamp.json';
 
     final content = await exportToUIAF(achievements, completedOnly: completedOnly);
     return await saveToFile(content, fileName);

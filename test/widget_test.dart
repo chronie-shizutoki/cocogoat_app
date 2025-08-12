@@ -6,16 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
-import 'package:geshin_achievement/main.dart';
-import 'package:geshin_achievement/providers/achievement_provider.dart';
+import 'package:genshin_achievement/main.dart';
+import 'package:genshin_achievement/providers/achievement_provider.dart';
 
 void main() {
   testWidgets('App starts and displays home screen', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const GeshinAchievementApp());
+    await tester.pumpWidget(const GenshinAchievementApp());
+
+    // Wait for the app to load and settle
+    await tester.pumpAndSettle(const Duration(seconds: 1));
 
     // Verify that the app starts with the home screen
-    expect(find.text('Geshin Achievement'), findsOneWidget);
+    expect(find.text('Genshin Achievement'), findsOneWidget);
     expect(find.byType(BottomNavigationBar), findsOneWidget);
     expect(find.text('首页'), findsOneWidget);
     expect(find.text('成就'), findsOneWidget);

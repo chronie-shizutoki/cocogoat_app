@@ -1,16 +1,18 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/achievement.dart';
-import '../services/database_service.dart';
 import '../services/achievement_data_service.dart';
 
 class AchievementProvider with ChangeNotifier {
-  final DatabaseService _databaseService = DatabaseService();
   List<Achievement> _achievements = [];
   List<Achievement> _filteredAchievements = [];
   String _searchQuery = '';
   String _selectedCategory = 'all';
   bool _showCompletedOnly = false;
   bool _isLoading = false;
+  late SharedPreferences _prefs;
 
   List<Achievement> get achievements => _filteredAchievements;
   bool get isLoading => _isLoading;
@@ -18,30 +20,38 @@ class AchievementProvider with ChangeNotifier {
   String get selectedCategory => _selectedCategory;
   bool get showCompletedOnly => _showCompletedOnly;
 
+  // 初始化 SharedPreferences
+  Future<void> _initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
   // 加载成就数据
   Future<void> loadAchievements() async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      // 首先尝试从数据库加载
-      final dbAchievements = await _databaseService.getAllAchievements();
+      await _initPrefs();
       
-      if (dbAchievements.isEmpty) {
-        // 如果数据库为空，从真实数据源加载
+      // 首先尝试从本地存储加载
+      final achievementsJson = _prefs.getStringList('achievements');
+      
+      if (achievementsJson == null || achievementsJson.isEmpty) {
+        // 如果本地存储为空，从真实数据源加载
         debugPrint('Loading achievements from real data...');
         final realAchievements = await AchievementDataService.parseRealAchievements();
         
-        // 保存到数据库
-        for (final achievement in realAchievements) {
-          await _databaseService.insertAchievement(achievement);
-        }
+        // 保存到本地存储
+        await _saveAchievements(realAchievements);
         
         _achievements = realAchievements;
         debugPrint('Loaded ${realAchievements.length} achievements from real data');
       } else {
-        _achievements = dbAchievements;
-        debugPrint('Loaded ${dbAchievements.length} achievements from database');
+        // 从本地存储解析成就数据
+        _achievements = achievementsJson
+            .map((json) => Achievement.fromJson(jsonDecode(json))) 
+            .toList();
+        debugPrint('Loaded ${_achievements.length} achievements from local storage');
       }
 
       _applyFilters();
@@ -55,22 +65,27 @@ class AchievementProvider with ChangeNotifier {
     }
   }
 
+  // 保存成就数据到本地存储
+  Future<void> _saveAchievements(List<Achievement> achievements) async {
+    final jsonList = achievements
+        .map((achievement) => jsonEncode(achievement.toJson()))
+        .toList();
+    await _prefs.setStringList('achievements', jsonList);
+  }
+
   // 重新加载真实数据
   Future<void> reloadRealData() async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      // 清空数据库
-      await _databaseService.clearAllAchievements();
+      await _initPrefs();
       
       // 重新加载真实数据
       final realAchievements = await AchievementDataService.parseRealAchievements();
       
-      // 保存到数据库
-      for (final achievement in realAchievements) {
-        await _databaseService.insertAchievement(achievement);
-      }
+      // 保存到本地存储
+      await _saveAchievements(realAchievements);
       
       _achievements = realAchievements;
       _applyFilters();
@@ -87,8 +102,10 @@ class AchievementProvider with ChangeNotifier {
   // 添加成就
   Future<void> addAchievement(Achievement achievement) async {
     try {
-      await _databaseService.insertAchievement(achievement);
+      await _initPrefs();
+      
       _achievements.add(achievement);
+      await _saveAchievements(_achievements);
       _applyFilters();
       notifyListeners();
     } catch (e) {
@@ -99,10 +116,12 @@ class AchievementProvider with ChangeNotifier {
   // 更新成就
   Future<void> updateAchievement(Achievement achievement) async {
     try {
-      await _databaseService.updateAchievement(achievement);
+      await _initPrefs();
+      
       final index = _achievements.indexWhere((a) => a.id == achievement.id);
       if (index != -1) {
         _achievements[index] = achievement;
+        await _saveAchievements(_achievements);
         _applyFilters();
         notifyListeners();
       }
@@ -114,8 +133,10 @@ class AchievementProvider with ChangeNotifier {
   // 删除成就
   Future<void> deleteAchievement(int id) async {
     try {
-      await _databaseService.deleteAchievement(id);
+      await _initPrefs();
+      
       _achievements.removeWhere((a) => a.id == id);
+      await _saveAchievements(_achievements);
       _applyFilters();
       notifyListeners();
     } catch (e) {
@@ -126,6 +147,8 @@ class AchievementProvider with ChangeNotifier {
   // 切换成就完成状态
   Future<void> toggleAchievementCompletion(int id) async {
     try {
+      await _initPrefs();
+      
       final index = _achievements.indexWhere((a) => a.id == id);
       if (index != -1) {
         final achievement = _achievements[index];
@@ -134,7 +157,10 @@ class AchievementProvider with ChangeNotifier {
           completedDate: !achievement.isCompleted ? DateTime.now() : null,
         );
         
-        await updateAchievement(updatedAchievement);
+        _achievements[index] = updatedAchievement;
+        await _saveAchievements(_achievements);
+        _applyFilters();
+        notifyListeners();
       }
     } catch (e) {
       debugPrint('Error toggling achievement completion: $e');

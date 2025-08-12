@@ -1,4 +1,4 @@
-package com.geshin.achievement.app.geshin_achievement
+package com.genshin.achievement.app.genshin_achievement
 
 import io.flutter.embedding.android.FlutterActivity
 

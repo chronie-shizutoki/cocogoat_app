@@ -1,4 +1,4 @@
-# Geshin Achievement
+# Genshin Achievement
 
 基于Flutter开发的原神成就管理移动应用，支持完整的成就记录、攻略查询和UIAF标准数据导出。
 
@@ -109,7 +109,7 @@ flutter build apk --release
 {
   "info": {
     "export_timestamp": 1640995200,
-    "export_app": "Geshin Achievement",
+    "export_app": "Genshin Achievement",
     "export_app_version": "1.0.0",
     "uiaf_version": "v1.1"
   },

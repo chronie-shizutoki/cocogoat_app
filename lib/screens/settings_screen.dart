@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../services/database_service.dart';
+import 'package:provider/provider.dart';
+import '../providers/settings_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -9,44 +10,41 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final DatabaseService _databaseService = DatabaseService();
-  String _currentLanguage = 'zh_CN';
-  String _currentTheme = 'system';
+  late SettingsProvider _settingsProvider;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadSettings();
+    _settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+    // 监听设置变化
+    _settingsProvider.addListener(_onSettingsChanged);
+    // 初始加载完成
+    setState(() {
+      _isLoading = false;
+    });
   }
 
-  Future<void> _loadSettings() async {
-    try {
-      final language = await _databaseService.getSetting('language') ?? 'zh_CN';
-      final theme = await _databaseService.getSetting('theme') ?? 'system';
-      
-      setState(() {
-        _currentLanguage = language;
-        _currentTheme = theme;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+  @override
+  void dispose() {
+    _settingsProvider.removeListener(_onSettingsChanged);
+    super.dispose();
   }
 
-  Future<void> _saveSetting(String key, String value) async {
-    try {
-      await _databaseService.setSetting(key, value);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('保存设置失败: $e')),
-        );
-      }
-    }
+  void _onSettingsChanged() {
+    setState(() {
+      // 设置变化时更新UI
+    });
+  }
+
+  // 获取当前语言显示名称
+  String _getCurrentLanguageDisplayName() {
+    return _getLanguageDisplayName(_settingsProvider.language);
+  }
+
+  // 获取当前主题显示名称
+  String _getCurrentThemeDisplayName() {
+    return _getThemeDisplayName(_settingsProvider.theme);
   }
 
   @override
@@ -69,14 +67,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.language),
             title: const Text('语言'),
-            subtitle: Text(_getLanguageDisplayName(_currentLanguage)),
+            subtitle: Text(_getCurrentLanguageDisplayName()),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _showLanguageDialog(),
           ),
           ListTile(
             leading: const Icon(Icons.palette),
             title: const Text('主题'),
-            subtitle: Text(_getThemeDisplayName(_currentTheme)),
+            subtitle: Text(_getCurrentThemeDisplayName()),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _showThemeDialog(),
           ),
@@ -114,7 +112,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.info),
             title: const Text('版本信息'),
-            subtitle: const Text('Geshin Achievement v1.0.0'),
+            subtitle: const Text('Genshin Achievement v1.0.0'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _showAboutDialog(),
           ),
@@ -182,13 +180,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('简体中文'),
               value: 'zh_CN',
-              groupValue: _currentLanguage,
+              groupValue: _settingsProvider.language,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentLanguage = value;
-                  });
-                  _saveSetting('language', value);
+                  _settingsProvider.setLanguage(value);
                   Navigator.pop(context);
                 }
               },
@@ -196,13 +191,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('繁體中文'),
               value: 'zh_TW',
-              groupValue: _currentLanguage,
+              groupValue: _settingsProvider.language,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentLanguage = value;
-                  });
-                  _saveSetting('language', value);
+                  _settingsProvider.setLanguage(value);
                   Navigator.pop(context);
                 }
               },
@@ -210,13 +202,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('English'),
               value: 'en_US',
-              groupValue: _currentLanguage,
+              groupValue: _settingsProvider.language,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentLanguage = value;
-                  });
-                  _saveSetting('language', value);
+                  _settingsProvider.setLanguage(value);
                   Navigator.pop(context);
                 }
               },
@@ -238,13 +227,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('浅色主题'),
               value: 'light',
-              groupValue: _currentTheme,
+              groupValue: _settingsProvider.theme,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentTheme = value;
-                  });
-                  _saveSetting('theme', value);
+                  _settingsProvider.setTheme(value);
                   Navigator.pop(context);
                 }
               },
@@ -252,13 +238,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('深色主题'),
               value: 'dark',
-              groupValue: _currentTheme,
+              groupValue: _settingsProvider.theme,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentTheme = value;
-                  });
-                  _saveSetting('theme', value);
+                  _settingsProvider.setTheme(value);
                   Navigator.pop(context);
                 }
               },
@@ -266,13 +249,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             RadioListTile<String>(
               title: const Text('跟随系统'),
               value: 'system',
-              groupValue: _currentTheme,
+              groupValue: _settingsProvider.theme,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    _currentTheme = value;
-                  });
-                  _saveSetting('theme', value);
+                  _settingsProvider.setTheme(value);
                   Navigator.pop(context);
                 }
               },
@@ -286,20 +266,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showBackupDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext dialogContext) => AlertDialog(
         title: const Text('备份数据'),
         content: const Text('此功能将把您的所有成就数据导出为备份文件，您可以在需要时使用此文件恢复数据。'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('取消'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              // TODO: 实现备份功能
+              Navigator.pop(dialogContext);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('备份功能开发中...')),
+                const SnackBar(content: Text('备份功能即将上线，敬请期待')),
               );
             },
             child: const Text('开始备份'),
@@ -312,20 +291,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showRestoreDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext dialogContext) => AlertDialog(
         title: const Text('恢复数据'),
         content: const Text('此功能将从备份文件恢复您的成就数据。注意：这将覆盖当前的所有数据。'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('取消'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              // TODO: 实现恢复功能
+              Navigator.pop(dialogContext);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('恢复功能开发中...')),
+                const SnackBar(content: Text('恢复功能即将上线，敬请期待')),
               );
             },
             child: const Text('选择文件'),
@@ -338,20 +316,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showClearDataDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext dialogContext) => AlertDialog(
         title: const Text('清除所有数据'),
         content: const Text('此操作将删除所有成就数据和应用设置，且无法恢复。您确定要继续吗？'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('取消'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              // TODO: 实现清除数据功能
+              Navigator.pop(dialogContext);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('清除数据功能开发中...')),
+                const SnackBar(content: Text('清除数据功能即将上线，敬请期待')),
               );
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
@@ -365,7 +342,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showAboutDialog() {
     showAboutDialog(
       context: context,
-      applicationName: 'Geshin Achievement',
+      applicationName: 'Genshin Achievement',
       applicationVersion: '1.0.0',
       applicationIcon: const Icon(Icons.emoji_events, size: 64),
       children: [
@@ -383,7 +360,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showHelpDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext dialogContext) => AlertDialog(
         title: const Text('帮助与支持'),
         content: const SingleChildScrollView(
           child: Column(
@@ -409,7 +386,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('确定'),
           ),
         ],
@@ -417,4 +394,3 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 }
-

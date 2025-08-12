@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Geshin Achievement'),
+        title: const Text('Genshin Achievement'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Consumer<AchievementProvider>(
@@ -100,10 +100,10 @@ class HomeScreen extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                          '已获得原石',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                            Text(
+                              '已获得原石',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
                             Text(
                               '${stats['primogems']}',
                               style: TextStyle(
@@ -122,15 +122,15 @@ class HomeScreen extends StatelessWidget {
 
                 // 分类统计
                 const Text(
-                          '分类统计',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
+                  '分类统计',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 8),
                 if (categories.isEmpty)
-                  const Card(
+                  Card(
                     child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text('暂无成就数据'),
+                      padding: const EdgeInsets.all(16.0),
+                      child: const Text('暂无成就数据'),
                     ),
                   )
                 else
@@ -197,4 +197,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
